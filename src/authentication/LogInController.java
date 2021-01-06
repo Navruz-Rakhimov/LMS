@@ -64,7 +64,10 @@ public class LogInController {
         String loginPassword = passwordTxt.getText().trim();
 
         if (!loginUsername.equals("") && !loginPassword.equals("")) {
-            User user = new User(loginUsername, loginPassword);
+            /*User user = new User(loginUsername, loginPassword);*/
+
+            // creating an object using Builder pattern
+            User user = new User.UserBuilder(loginUsername, loginPassword).build();
 
             if (UsersRepository.getInstance().verifyUser(user)) {
                 warningLabel.setText("Success! Loading...");
