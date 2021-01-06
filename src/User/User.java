@@ -8,7 +8,7 @@ public class User {
 
     public User() {}
 
-    public User(String username, String password, String email, int role) {
+    /*public User(String username, String password, String email, int role) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -25,7 +25,49 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = "";
+    }*/
+
+    // Builder Pattern feature
+    public User(UserBuilder userBuilder){
+        this.username = userBuilder.username;
+        this.password = userBuilder.password;
+        this.email = userBuilder.email;
+        this.role = userBuilder.role;
     }
+
+    public static class UserBuilder{
+        private String username;
+        private String password;
+        private String email;
+        private int role;
+
+        // mandatory entries
+        public UserBuilder(String username, String password){
+            this.username = username;
+            this.password = password;
+        }
+        // optional entries
+        public UserBuilder email(String email){
+            this.email = email;
+            return this;
+        }
+        public UserBuilder role(int role){
+            this.role = role;
+            return this;
+        }
+
+        public User build(){
+            User user = new User(this);
+            objectValidation(user);
+            return user;
+        }
+        private void objectValidation(User user){
+            if(user.email == null){
+                user.email = "";
+            }
+        }
+    }
+
 
     public int getRole() {
         return role;

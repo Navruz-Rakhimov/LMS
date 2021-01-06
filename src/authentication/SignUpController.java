@@ -37,7 +37,11 @@ public class SignUpController {
         String signUpEmail = emailTxt.getText().trim();
 
         if (!signUpUsername.equals("") && !signUpPassword.equals("") && !signUpEmail.equals("")) {
-            User user = new User(signUpUsername, signUpPassword, signUpEmail);
+            /*User user = new User(signUpUsername, signUpPassword, signUpEmail);*/
+
+            // creating user object using Builder pattern
+            User user = new User.UserBuilder(signUpUsername, signUpPassword).email(signUpEmail).build();
+
             if (UsersRepository.getInstance().addUser(user)) {
                 warningLabel.setText("Success! Now log in.");
             } else {
