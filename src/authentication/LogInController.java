@@ -1,7 +1,6 @@
 package authentication;
 
-import User.User;
-import adminWindow.AdminWindowController;
+import user.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -80,10 +79,10 @@ public class LogInController {
                             root = FXMLLoader.load(getClass().getResource("/adminWindow/adminWindowFxml.fxml"));
                             break;
                         case 1:
-                            root = FXMLLoader.load(getClass().getResource("librarianWindowFxml.fxml"));
+                            root = FXMLLoader.load(getClass().getResource("/librarianWindow/librarianWindowFxml.fxml"));
                             break;
                         case 2:
-                            root = FXMLLoader.load(getClass().getResource("studentWindowFxml.fxml"));
+                            root = FXMLLoader.load(getClass().getResource("/studentWindow/studentWindowFxml.fxml"));
                             break;
                     }
                 } catch (IOException e) {

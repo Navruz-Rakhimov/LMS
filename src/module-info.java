@@ -5,4 +5,8 @@ module LMS {
 
     opens authentication;
     opens adminWindow;
+    opens book;
+    opens user;
+    opens adminWindow.adminBookWindow;
+    opens adminWindow.adminLibrarianWindow;
 }

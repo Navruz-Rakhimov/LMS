@@ -1,12 +1,23 @@
-package User;
+package user;
 
 public class User {
-    private String username;
-    private String password;
-    private String email;
-    private int role; // 0, 1, 2 for admin, librarian, student respectively
+    protected String username;
+    protected String password;
+    protected String firstName;
+    protected String lastName;
+    protected String email;
+    protected int role; // 0, 1, 2 for admin, librarian, student respectively
 
     public User() {}
+
+    public User(String username, String password, String firstName, String lastName, String email, int role) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+    }
 
     public User(String username, String password, String email, int role) {
         this.username = username;
@@ -27,13 +38,7 @@ public class User {
         this.email = "";
     }
 
-    public int getRole() {
-        return role;
-    }
 
-    public void setRole(int role) {
-        this.role = role;
-    }
 
     public String getUsername() {
         return username;
@@ -57,5 +62,29 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }

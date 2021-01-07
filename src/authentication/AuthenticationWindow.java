@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class AuthenticationWindow extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("logInFxml.fxml"));
         primaryStage.setTitle("Inha University Library");
         primaryStage.setScene(new Scene(root, 600, 400));

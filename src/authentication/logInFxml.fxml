@@ -17,12 +17,7 @@
             </font>
         </Label>
         <PasswordField fx:id="passwordTxt" layoutX="225.0" layoutY="223.0" promptText="password" />
-        <RadioButton fx:id="studentRadioButton" layoutX="226.0" layoutY="262.0" mnemonicParsing="false" text="Student">
-         <toggleGroup>
-            <ToggleGroup fx:id="roleToggleGroup" />
-         </toggleGroup>
-        </RadioButton>
-        <RadioButton fx:id="librarianRadioButton" layoutX="307.0" layoutY="262.0" mnemonicParsing="false" text="Librarian" toggleGroup="$roleToggleGroup" />
+
         <Button fx:id="signUpButton" layoutX="502.0" layoutY="45.0" mnemonicParsing="false" onAction="#handleSignUp" text="Sign Up" />
         <TextField fx:id="usernameTxt" layoutX="225.0" layoutY="187.0" promptText="username" />
         <Button fx:id="logInButton" layoutX="275.0" layoutY="299.0" mnemonicParsing="false" onAction="#handleLogIn" text="Log in" />

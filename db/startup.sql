@@ -1,36 +1,30 @@
-DROP TABLE students;
-DROP TABLE librarians;
+DROP TABLE users;
 DROP TABLE books;
 DROP TABLE authors;
 DROP TABLE authorISBN;
 DROP TABLE overdueBooks;
-DROP TABLE librarianStudent;
 DROP TABLE studentBook;
 
-CREATE TABLE students (
-    studentId INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+
+CREATE TABLE users (
+    username VARCHAR(30) NOT NULL,
+    password VARCHAR (30) NOT NULL,
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR (30) NOT NULL,
-    PRIMARY KEY (StudentId)
+    email VARCHAR(30) NOT NULL,
+    role INT NOT NULL,
+    PRIMARY KEY (username)
 );
 
-INSERT INTO students (firstName, lastName)
+INSERT INTO users (username, password, firstName, lastName, email, role)
 VALUES
-    ('Navruz', 'Rakhimov'),
-    ('Doston', 'Dostonov'),
-    ('Magomed', 'Magomedov'),
-    ('Elon', 'Musk');
-
-
-
-CREATE TABLE librarians (
-    librarianId INT NOT NULL GENERATED ALWAYS AS IDENTITY,
-    firstName VARCHAR(30) NOT NULL,
-    lastName VARCHAR (30) NOT NULL,
-    PRIMARY KEY (LibrarianId)
-);
-
-INSERT INTO librarians (firstName, lastName) VALUES  ('Jennifer', 'Lawrence');
+    ('navruz', '11111', 'Navruz', 'Rakhimov', 'rakhimovnavruz@gmail.com', 0),
+    ('doston', '22222', 'Doston', 'Dostonov', 'dostonbek@gmail.com', 2),
+    ('magomed', '33333', 'Magomed', 'Magomedov', 'magomedov@gmail.com', 2),
+    ('elon', '44444', 'Elon', 'Musk', 'elonmusk@gmail.com', 2),
+    ('colby', '22222', 'Colby', 'Covington', 'ccovington@gmail.com', 2),
+    ('daniel', '11111', 'Daniel', 'Cormier', 'dc@gmail.com', 1),
+    ('jennifer', '11111','Jennifer', 'Lawrence', 'jlawrence@gmail.com', 1);
 
 
 CREATE TABLE books (
@@ -38,23 +32,24 @@ CREATE TABLE books (
     title VARCHAR (100) NOT NULL,
     editionNumber INT NOT NULL,
     copyright varchar (4) NOT NULL,
+    quantity INT NOT NULL,
     PRIMARY KEY (isbn)
 );
 
-INSERT INTO books (isbn, title, editionNumber, copyright)
+INSERT INTO books (isbn, title, editionNumber, copyright, quantity)
 VALUES
-   ('0132151006','Internet & World Wide Web How to Program',5,'2012'),
-   ('0133807800','Java How to Program',10,'2015'),
-   ('0132575655','Java How to Program, Late Objects Version',10,'2015'),
-   ('013299044X','C How to Program',7,'2013'),
-   ('0132990601','Simply Visual Basic 2010',4,'2013'),
-   ('0133406954','Visual Basic 2012 How to Program',6,'2014'),
-   ('0133379337','Visual C# 2012 How to Program',5,'2014'),
-   ('0136151574','Visual C++ How to Program',2,'2008'),
-   ('0133378713','C++ How to Program',9,'2014'),
-   ('0133764036','Android How to Program',2,'2015'),
-   ('0133570924','Android for Programmers: An App.App-Driven Approach, Volume 1',2,'2014'),
-   ('0132121360','Android for Programmers: An App.App-Driven Approach',1,'2012');
+   ('0132151006','Internet & World Wide Web How to Program',5,'2012', 50),
+   ('0133807800','Java How to Program',10,'2015', 30),
+   ('0132575655','Java How to Program, Late Objects Version',10,'2015', 40),
+   ('013299044X','C How to Program',7,'2013', 50),
+   ('0132990601','Simply Visual Basic 2010',4,'2013', 70),
+   ('0133406954','Visual Basic 2012 How to Program',6,'2014', 110),
+   ('0133379337','Visual C# 2012 How to Program',5,'2014', 60),
+   ('0136151574','Visual C++ How to Program',2,'2008', 80),
+   ('0133378713','C++ How to Program',9,'2014', 90),
+   ('0133764036','Android How to Program',2,'2015', 80),
+   ('0133570924','Android for Programmers: An App.App-Driven Approach, Volume 1',2,'2014', 90),
+   ('0132121360','Android for Programmers: An App.App-Driven Approach',1,'2012', 100);
 
 CREATE TABLE authors (
    authorID INT NOT NULL GENERATED ALWAYS AS IDENTITY,
@@ -91,36 +86,36 @@ VALUES
 
 
 CREATE TABLE overdueBooks (
-    studentId INT NOT NULL,
+    username VARCHAR(30) NOT NULL,
     isbn VARCHAR (20) NOT NULL,
     borrowedDate DATE NOT NULL,
     expiredDate DATE NOT NULL,
-    FOREIGN KEY (studentId) REFERENCES students (studentId),
+    FOREIGN KEY (username) REFERENCES users (username),
     FOREIGN KEY (isbn) REFERENCES books (isbn)
 );
 
-INSERT INTO overdueBooks (studentId, isbn, borrowedDate, expiredDate)
+INSERT INTO overdueBooks (username, isbn, borrowedDate, expiredDate)
 VALUES
-    (1, '0132151006', '2020-12-11', '2021-01-01'),
-    (1, '013299044X', '2020-11-11', '2020-12-01'),
-    (3, '0136151574', '2020-10-11', '2020-11-01');
+    ('doston', '0132151006', '2020-12-11', '2021-01-01'),
+    ('elon', '013299044X', '2020-11-11', '2020-12-01'),
+    ('elon', '0136151574', '2020-10-11', '2020-11-01');
 
 
 CREATE TABLE studentBook (
-    studentId INT NOT NULL,
+    username VARCHAR(30) NOT NULL,
     isbn VARCHAR(20) NOT NULL,
-    FOREIGN KEY (studentId) REFERENCES students(studentId),
-    FOREIGN KEY (isbn) REFERENCES books(isbn)
+    FOREIGN KEY (username) REFERENCES users (username),
+    FOREIGN KEY (isbn) REFERENCES books (isbn)
 );
 
-INSERT INTO studentBook (studentId, isbn)
+INSERT INTO studentBook (username, isbn)
 VALUES
-    (1, '013299044X'),
-    (1, '0133807800'),
-    (2, '013299044X'),
-    (1, '0133406954'),
-    (3, '0133406954'),
-    (4, '0133764036');
+    ('elon', '013299044X'),
+    ('elon', '0133807800'),
+    ('magomed', '013299044X'),
+    ('elon', '0133406954'),
+    ('doston', '0133406954'),
+    ('colby', '0133764036');
 
 
 
