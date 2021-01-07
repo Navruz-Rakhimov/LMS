@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="adminWindow.NewBookDialogController"
+            prefHeight="300.0" prefWidth="500.0">
+
+    <headerText>
+        Enter new book details
+    </headerText>
+
+    <content>
+        <GridPane hgap="10" vgap="10">
+            <padding>
+                <Insets top="10" bottom="10" left="10" right="10"/>
+            </padding>
+            <Label text="ISBN" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="isbn" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Title" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="title" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Edition" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="edition" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Copyright" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="copyright" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Quantity" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="quantity" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        </GridPane>
+    </content>
+
+</DialogPane>
