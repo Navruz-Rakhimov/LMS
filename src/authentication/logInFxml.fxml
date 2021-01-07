@@ -11,9 +11,9 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="authentication.LogInController">
     <children>
-        <Label layoutX="236.0" layoutY="45.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="53.0" prefWidth="127.0" text="Inha University Library">
+        <Label alignment="CENTER" layoutX="139.0" layoutY="43.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="54.0" prefWidth="319.0" text="IUT Library System" textAlignment="CENTER" textFill="#004ad2">
             <font>
-                <Font size="13.0" />
+                <Font name="Arial Bold" size="27.0" />
             </font>
         </Label>
         <PasswordField fx:id="passwordTxt" layoutX="225.0" layoutY="223.0" promptText="password" />
@@ -24,8 +24,8 @@
         </RadioButton>
         <RadioButton fx:id="librarianRadioButton" layoutX="307.0" layoutY="262.0" mnemonicParsing="false" text="Librarian" toggleGroup="$roleToggleGroup" />
         <Button fx:id="signUpButton" layoutX="502.0" layoutY="45.0" mnemonicParsing="false" onAction="#handleSignUp" text="Sign Up" />
-        <TextField fx:id="usernameTxt" layoutX="225.0" layoutY="187.0" promptText="username" />
+        <TextField fx:id="emailTxt" layoutX="225.0" layoutY="187.0" promptText="email" />
         <Button fx:id="logInButton" layoutX="275.0" layoutY="299.0" mnemonicParsing="false" onAction="#handleLogIn" text="Log in" />
-        <Label fx:id="warningLabel" layoutX="225.0" layoutY="157.0" prefHeight="17.0" prefWidth="149.0" />
+        <Label fx:id="warningLabel" alignment="CENTER" layoutX="177.0" layoutY="156.0" prefHeight="18.0" prefWidth="246.0" textAlignment="CENTER" />
     </children>
 </AnchorPane>

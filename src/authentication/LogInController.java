@@ -1,7 +1,6 @@
 package authentication;
 
 import User.User;
-import adminWindow.AdminWindowController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LogInController {
 
@@ -24,7 +24,7 @@ public class LogInController {
     @FXML
     public Button signUpButton;
     @FXML
-    public TextField usernameTxt;
+    public TextField emailTxt;
     @FXML
     public Button logInButton;
     @FXML
@@ -59,15 +59,15 @@ public class LogInController {
     }
 
     @FXML
-    public void handleLogIn(ActionEvent actionEvent) {
-        String loginUsername = usernameTxt.getText().trim();
+    public void handleLogIn(ActionEvent actionEvent) throws SQLException {
+        String loginEmail = emailTxt.getText().trim();
         String loginPassword = passwordTxt.getText().trim();
 
-        if (!loginUsername.equals("") && !loginPassword.equals("")) {
+        if (!loginEmail.equals("") && !loginPassword.equals("")) {
             /*User user = new User(loginUsername, loginPassword);*/
 
             // creating an object using Builder pattern
-            User user = new User.UserBuilder(loginUsername, loginPassword).build();
+            User user = new User.UserBuilder("entryPoint", loginPassword).email(loginEmail).build();
 
             if (UsersRepository.getInstance().verifyUser(user)) {
                 warningLabel.setText("Success! Loading...");

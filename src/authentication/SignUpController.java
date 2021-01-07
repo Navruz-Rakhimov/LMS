@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SignUpController {
     @FXML
@@ -31,7 +32,7 @@ public class SignUpController {
 
 
     @FXML
-    public void handleSignUp(ActionEvent actionEvent) {
+    public void handleSignUp(ActionEvent actionEvent) throws SQLException {
         String signUpUsername = usernameTxt.getText().trim();
         String signUpPassword = passwordTxt.getText().trim();
         String signUpEmail = emailTxt.getText().trim();

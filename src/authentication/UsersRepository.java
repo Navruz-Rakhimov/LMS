@@ -5,15 +5,15 @@ import User.User;
 import java.sql.*;
 
 public class UsersRepository {
-    String dbName = "users";
-    String connectionURL = "jdbc:derby:./db/" + dbName;
+//    String dbName = "database";
+    String connectionURL = "jdbc:derby:./db/database";
     Connection conn = null;
     Statement s;
 
     private final String GET_ALL_QUERY = "SELECT * FROM Users";
-    private final String GET_QUERY = "SELECT * FROM Users where username=?";
-    private final String ADD_QUERY = "INSERT INTO Users(Username,Password,Email) VALUES (?,?,?)";
-    private final String DELETE_QUERY = "DELETE FROM Users WHERE username=?";
+    private final String GET_QUERY = "SELECT * FROM Users WHERE email=?";
+    private final String ADD_QUERY = "INSERT INTO Users(Username,Password,Email,Role) VALUES (?,?,?,?)";
+    private final String DELETE_QUERY = "DELETE FROM Users WHERE email=?";
     private final String GET_LAST_ID = "SELECT MAX(UserId) FROM Users";
     private final String GET_ROLE_QUERY = "SELECT Role FROM Users where username=?";
 
@@ -26,9 +26,17 @@ public class UsersRepository {
 
     private static UsersRepository instance;
 
-    private UsersRepository() {}
+    UsersRepository() throws SQLException {
+        this.conn = DriverManager.getConnection(connectionURL);
+        this.getStmt = conn.prepareStatement(GET_QUERY);
+        this.getAllStmt = conn.prepareStatement(GET_ALL_QUERY);
+        this.getRoleStmt = conn.prepareStatement(GET_ROLE_QUERY);
+        this.getLastIdStmt = conn.prepareStatement(GET_LAST_ID);
+        this.deleteStmt = conn.prepareStatement(DELETE_QUERY);
+        this.addStmt = conn.prepareStatement(ADD_QUERY);
+    }
 
-    public static UsersRepository getInstance() {
+    public static UsersRepository getInstance() throws SQLException {
         if (instance == null) {
             instance = new UsersRepository();
         }
@@ -36,21 +44,17 @@ public class UsersRepository {
     }
 
     public boolean addUser(User user) {
-
         try {
-            conn = DriverManager.getConnection(connectionURL);
-            addStmt = conn.prepareStatement(ADD_QUERY);
-
             addStmt.setString(1, user.getUsername());
             addStmt.setString(2, user.getPassword());
             addStmt.setString(3, user.getEmail());
+            addStmt.setInt(4, user.getRole());
 
             if (addStmt.executeUpdate() > 0) {
                 return true;
             } else {
                 return false;
             }
-
         } catch (SQLException e) {
             return false;
         }
@@ -58,15 +62,12 @@ public class UsersRepository {
 
     public boolean verifyUser(User user) {
         try {
-            conn = DriverManager.getConnection(connectionURL);
-
-            getStmt = conn.prepareStatement(GET_QUERY);
-            getStmt.setString(1, user.getUsername());
+            getStmt.setString(1, user.getEmail());
 
             if (getStmt.execute()) {
                 ResultSet rs = getStmt.getResultSet();
                 if (rs.next()) {
-                    System.out.println("Username is correct");
+                    System.out.println("Email is correct");
                     if (rs.getString("Password").equals(user.getPassword())) {
                         System.out.println("Password is correct");
                         return true;
@@ -74,7 +75,7 @@ public class UsersRepository {
                     System.out.println("Password is incorrect!");
                 }
                 else {
-                    System.out.println("Username is incorrect");
+                    System.out.println("Email is incorrect");
                     return false;
                 }
             }
