@@ -17,19 +17,13 @@ public class LogInController {
     @FXML
     public PasswordField passwordTxt;
     @FXML
-    public RadioButton studentRadioButton;
-    @FXML
-    public RadioButton librarianRadioButton;
-    @FXML
     public Button signUpButton;
     @FXML
-    public TextField usernameTxt;
+    public TextField emailTxt;
     @FXML
     public Button logInButton;
     @FXML
     public Label warningLabel;
-    @FXML
-    public ToggleGroup roleToggleGroup;
 
     @FXML
     public void handleSignUp(ActionEvent actionEvent) {
@@ -59,19 +53,17 @@ public class LogInController {
 
     @FXML
     public void handleLogIn(ActionEvent actionEvent) {
-        String loginUsername = usernameTxt.getText().trim();
-        String loginPassword = passwordTxt.getText().trim();
+        String email = emailTxt.getText().trim();
+        String password = passwordTxt.getText().trim();
 
-        if (!loginUsername.equals("") && !loginPassword.equals("")) {
-            User user = new User(loginUsername, loginPassword);
+        if (!email.equals("") && !password.equals("")) {
+            User user = new User(email, password);
 
             if (UsersRepository.getInstance().verifyUser(user)) {
                 warningLabel.setText("Success! Loading...");
 
                 int role = UsersRepository.getInstance().getUserRole(user);
                 Parent root = null;
-
-                System.out.println("Role: " + role);
 
                 try {
                     switch (role) {
