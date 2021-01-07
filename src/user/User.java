@@ -1,51 +1,41 @@
 package user;
 
 public class User {
-    protected String username;
+    protected String userId;
+    protected String email;
     protected String password;
     protected String firstName;
     protected String lastName;
-    protected String email;
     protected int role; // 0, 1, 2 for admin, librarian, student respectively
 
     public User() {}
 
-    public User(String username, String password, String firstName, String lastName, String email, int role) {
-        this.username = username;
+    public User(String userId, String email, String password, String firstName, String lastName, int role) {
+        this.userId = userId;
+        this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.role = role;
     }
 
-    public User(String username, String password, String email, int role) {
-        this.username = username;
-        this.password = password;
+    public User(String email, String password, int role) {
         this.email = email;
+        this.password = password;
         this.role = role;
     }
 
-    public User(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
+    public User(String email, String password) {
         this.email = email;
-    }
-
-    public User(String username, String password) {
-        this.username = username;
         this.password = password;
-        this.email = "";
     }
 
-
-
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {

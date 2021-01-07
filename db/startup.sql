@@ -7,24 +7,24 @@ DROP TABLE studentBook;
 
 
 CREATE TABLE users (
-    username VARCHAR(30) NOT NULL,
+    userId INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+    email VARCHAR(30) NOT NULL,
     password VARCHAR (30) NOT NULL,
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR (30) NOT NULL,
-    email VARCHAR(30) NOT NULL,
     role INT NOT NULL,
-    PRIMARY KEY (username)
+    PRIMARY KEY (userId)
 );
 
-INSERT INTO users (username, password, firstName, lastName, email, role)
+INSERT INTO users (email, password, firstName, lastName, role)
 VALUES
-    ('navruz', '11111', 'Navruz', 'Rakhimov', 'rakhimovnavruz@gmail.com', 0),
-    ('doston', '22222', 'Doston', 'Dostonov', 'dostonbek@gmail.com', 2),
-    ('magomed', '33333', 'Magomed', 'Magomedov', 'magomedov@gmail.com', 2),
-    ('elon', '44444', 'Elon', 'Musk', 'elonmusk@gmail.com', 2),
-    ('colby', '22222', 'Colby', 'Covington', 'ccovington@gmail.com', 2),
-    ('daniel', '11111', 'Daniel', 'Cormier', 'dc@gmail.com', 1),
-    ('jennifer', '11111','Jennifer', 'Lawrence', 'jlawrence@gmail.com', 1);
+    ('rakhimovnavruz@gmail.com', '11111', 'Navruz', 'Rakhimov', 0),
+    ('dostonbek@gmail.com', '22222', 'Doston', 'Dostonov', 2),
+    ('magomedov@gmail.com', '33333', 'Magomed', 'Magomedov', 2),
+    ('elonmusk@gmail.com', '44444', 'Elon', 'Musk', 2),
+    ( 'ccovington@gmail.com', '22222', 'Colby', 'Covington', 2),
+    ( 'dc@gmail.com', '11111', 'Daniel', 'Cormier', 1),
+    ('jlawrence@gmail.com', '11111','Jennifer', 'Lawrence', 1);
 
 
 CREATE TABLE books (
@@ -86,36 +86,36 @@ VALUES
 
 
 CREATE TABLE overdueBooks (
-    username VARCHAR(30) NOT NULL,
+    userId INT NOT NULL,
     isbn VARCHAR (20) NOT NULL,
     borrowedDate DATE NOT NULL,
     expiredDate DATE NOT NULL,
-    FOREIGN KEY (username) REFERENCES users (username),
+    FOREIGN KEY (userId) REFERENCES users (userId),
     FOREIGN KEY (isbn) REFERENCES books (isbn)
 );
 
-INSERT INTO overdueBooks (username, isbn, borrowedDate, expiredDate)
+INSERT INTO overdueBooks (userId, isbn, borrowedDate, expiredDate)
 VALUES
-    ('doston', '0132151006', '2020-12-11', '2021-01-01'),
-    ('elon', '013299044X', '2020-11-11', '2020-12-01'),
-    ('elon', '0136151574', '2020-10-11', '2020-11-01');
+    (2, '0132151006', '2020-12-11', '2021-01-01'),
+    (3, '013299044X', '2020-11-11', '2020-12-01'),
+    (5, '0136151574', '2020-10-11', '2020-11-01');
 
 
 CREATE TABLE studentBook (
-    username VARCHAR(30) NOT NULL,
+    userId INT NOT NULL,
     isbn VARCHAR(20) NOT NULL,
-    FOREIGN KEY (username) REFERENCES users (username),
+    FOREIGN KEY (userId) REFERENCES users (userId),
     FOREIGN KEY (isbn) REFERENCES books (isbn)
 );
 
-INSERT INTO studentBook (username, isbn)
+INSERT INTO studentBook (userId, isbn)
 VALUES
-    ('elon', '013299044X'),
-    ('elon', '0133807800'),
-    ('magomed', '013299044X'),
-    ('elon', '0133406954'),
-    ('doston', '0133406954'),
-    ('colby', '0133764036');
+    (2, '013299044X'),
+    (3, '0133807800'),
+    (3, '013299044X'),
+    (5, '0133406954'),
+    (4, '0133406954'),
+    (2, '0133764036');
 
 
 
