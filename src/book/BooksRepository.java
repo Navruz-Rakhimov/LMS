@@ -109,7 +109,6 @@ public class BooksRepository {
     }
 
     public void addBook(Book book) {
-        System.out.println("WE ARE AT 'addBook(Book book)' ************************************************");
         try {
             checkStmt.setString(1, book.getIsbn());
             ResultSet rs = checkStmt.executeQuery();
