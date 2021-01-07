@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public class AdminBookController {
@@ -109,7 +110,13 @@ public class AdminBookController {
             System.out.println("BOOK: " + book.getIsbn() + " " + book.getTitle() + " " + book.getEdition() + " " + book.getCopyright() + " " + book.getQuantity());
 
             BooksRepository.getInstance().addBook(book);
-            books.add(book);
+            // .....
+            if (containsIsbn(books, book.getIsbn())) {
+                books = BooksRepository.getInstance().getAllBooks();
+                tableView.setItems(books);
+            } else {
+                books.add(book);
+            }
         }
     }
 
@@ -135,5 +142,10 @@ public class AdminBookController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // https://stackoverflow.com/questions/18852059/java-list-containsobject-with-field-value-equal-to-x
+    private boolean containsIsbn(final List<Book> list, final String isbn){
+        return list.stream().filter(o -> o.getIsbn().equals(isbn)).findFirst().isPresent();
     }
 }

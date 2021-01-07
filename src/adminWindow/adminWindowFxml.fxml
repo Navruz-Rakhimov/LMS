@@ -43,9 +43,14 @@
       </VBox>
       <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
           <columns>
-              <TableColumn prefWidth="100" text="Username">
+              <TableColumn prefWidth="100" text="User ID">
                   <cellValueFactory>
-                      <PropertyValueFactory property="username" />
+                      <PropertyValueFactory property="userId" />
+                  </cellValueFactory>
+              </TableColumn>
+              <TableColumn prefWidth="150" text="Email">
+                  <cellValueFactory>
+                      <PropertyValueFactory property="email" />
                   </cellValueFactory>
               </TableColumn>
               <TableColumn prefWidth="100" text="Password">
@@ -61,11 +66,6 @@
               <TableColumn prefWidth="100" text="Last Name">
                   <cellValueFactory>
                       <PropertyValueFactory property="lastName" />
-                  </cellValueFactory>
-              </TableColumn>
-              <TableColumn prefWidth="150" text="Email">
-                  <cellValueFactory>
-                      <PropertyValueFactory property="email" />
                   </cellValueFactory>
               </TableColumn>
           </columns>
