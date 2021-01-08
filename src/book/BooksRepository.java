@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 
 public class BooksRepository {
-    String dbName = "main";
+    String dbName = "database";
     String connectionURL = "jdbc:derby:./db/" + dbName;
     Connection conn = null;
 
