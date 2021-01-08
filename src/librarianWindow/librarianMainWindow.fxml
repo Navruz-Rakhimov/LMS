@@ -96,18 +96,6 @@
                   </GridPane>
                </content>
           </Tab>
-          <Tab text="Authors">
-               <content>
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="393.7999633789062" minHeight="10.0" prefHeight="393.7999633789062" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="206.60001220703126" minHeight="10.0" prefHeight="29.000036621093784" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                  </GridPane>
-               </content></Tab>
             <Tab text="Students">
                <content>
                   <GridPane>
@@ -118,6 +106,42 @@
                       <RowConstraints maxHeight="396.20001831054685" minHeight="10.0" prefHeight="395.2000244140625" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="206.60001220703126" minHeight="10.0" prefHeight="28.79997558593749" vgrow="SOMETIMES" />
                     </rowConstraints>
+                     <children>
+                        <TableView fx:id="studentsTabView" prefHeight="200.0" prefWidth="200.0">
+                            <columns>
+                                <TableColumn prefWidth="100" text="User ID">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="userId" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="150" text="Email">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="email" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="100" text="Password">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="password" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="100" text="First Name">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="firstName" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="100" text="Last Name">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="lastName" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
+                          <items>
+                            <Button mnemonicParsing="false" onAction="#handleAddStudentButton" text="Add" />
+                          </items>
+                        </ToolBar>
+                     </children>
                   </GridPane>
                </content></Tab>
             <Tab text="Borrowed Books">

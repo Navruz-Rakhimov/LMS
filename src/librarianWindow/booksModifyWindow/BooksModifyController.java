@@ -3,8 +3,11 @@ package librarianWindow.booksModifyWindow;
 import book.Book;
 import book.BooksRepository;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
@@ -39,7 +42,7 @@ public class BooksModifyController {
     }
 
     @FXML
-    public void modifyBookInfo(){
+    public void modifyBookInfo(ActionEvent event){
         Book editedBook = this.book;
         editedBook.setCopyright(copyrightTextField.getText());
         editedBook.setEdition(editionTextField.getText());
@@ -50,5 +53,12 @@ public class BooksModifyController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        closeStage(event);
+    }
+
+    private void closeStage(ActionEvent event) {
+        Node source = (Node)  event.getSource();
+        Stage stage  = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 }

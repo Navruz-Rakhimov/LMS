@@ -1,6 +1,7 @@
 package librarianWindow;
 
 import adminWindow.NewBookDialogController;
+import adminWindow.NewUserDialogController;
 import authentication.UsersRepository;
 import book.Book;
 import book.BooksRepository;
@@ -11,15 +12,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import librarianWindow.booksModifyWindow.BooksModifyController;
 import staticTools.UserTracker;
+import user.User;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -28,22 +27,28 @@ import java.util.List;
 import java.util.Optional;
 
 public class librarianWindowController {
+    ObservableList<User> students;
     ObservableList<Book> books;
-
     @FXML
     private Label userEmailLabel;
     @FXML
     private GridPane gridPane;
     @FXML
     private TableView<Book> booksTableView;
+    @FXML
+    private TableView<User> studentsTabView;
+
 
     @FXML
     public void initialize(){
         userEmailLabel.setText(UserTracker.getLastTrackedUser());
         books = BooksRepository.getInstance().getAllBooks();
+        students = UsersRepository.getInstance().getAllStudents();
         booksTableView.setItems(books);
+        studentsTabView.setItems(students);
     }
 
+    // books tab
     @FXML
     public void handleAddButton() {
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -132,5 +137,42 @@ public class librarianWindowController {
     // https://stackoverflow.com/questions/18852059/java-list-containsobject-with-field-value-equal-to-x
     private boolean containsIsbn(final List<Book> list, final String isbn){
         return list.stream().filter(o -> o.getIsbn().equals(isbn)).findFirst().isPresent();
+    }
+
+
+
+    // students tab
+    @FXML
+    public void handleAddStudentButton(ActionEvent actionEvent) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(gridPane.getScene().getWindow());
+
+        dialog.setTitle("Add New Student");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/adminWindow/newUserDialogFxml.fxml"));
+
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            NewUserDialogController controller = fxmlLoader.getController();
+            User student = controller.getUser(2);
+            if (UsersRepository.getInstance().addUser(student)) {
+                student.setUserId(UsersRepository.getInstance().getUserId(student));
+                students.add(student);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Add New Student");
+                alert.setHeaderText("The student was not added!");
+                alert.setContentText("Student with entered email already exists!");
+                alert.showAndWait();
+            }
+        }
     }
 }
