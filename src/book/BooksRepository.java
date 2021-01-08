@@ -20,13 +20,14 @@ public class BooksRepository {
     private final String DELETE_FROM_STUDENT_BOOK_QUERY = "DELETE FROM studentBook WHERE isbn=?";
     private final String DELETE_FROM_OVERDUE_BOOK_QUERY = "DELETE FROM overdueBooks WHERE isbn=?";
     private final String DELETE_FROM_AUTHOR_ISBN_QUERY = "DELETE FROM authorISBN WHERE isbn=?";
-    private final String UPDATE_BOOK_QUERY = "UPDATE books SET isbn=?, title=?, editionNumber=?, copyright=?, quantity=? WHERE isbn=?";
+    private final String UPDATE_BOOK_QUERY = "UPDATE books SET title=?, editionNumber=?, copyright=?, quantity=? WHERE isbn=?";
 
     private PreparedStatement getAllBooksStmt;
     private PreparedStatement getBookQuantityStmt;
     private PreparedStatement addBookStmt;
     private PreparedStatement checkStmt;
     private PreparedStatement updateStmt;
+    private PreparedStatement updateBookStmt;
 
     private PreparedStatement deleteFromBooks;
     private PreparedStatement deleteFromStudentBook;
@@ -45,6 +46,7 @@ public class BooksRepository {
             addBookStmt = conn.prepareStatement(ADD_BOOK_QUERY);
             checkStmt = conn.prepareStatement(CHECK_IF_EXISTS_QUERY);
             updateStmt = conn.prepareStatement(UPDATE_QUANTITY_QUERY);
+            updateBookStmt = conn.prepareStatement(UPDATE_BOOK_QUERY);
 
             deleteFromBooks = conn.prepareStatement(DELETE_FROM_BOOKS_QUERY);
             deleteFromStudentBook = conn.prepareStatement(DELETE_FROM_STUDENT_BOOK_QUERY);
@@ -104,8 +106,14 @@ public class BooksRepository {
         }
     }
 
-    public void updateBook(String isbn, Book book) {
+    public void updateBook(Book book) throws SQLException {
+        updateBookStmt.setString(1, book.getTitle());
+        updateBookStmt.setString(2, book.getEdition());
+        updateBookStmt.setString(3, book.getCopyright());
+        updateBookStmt.setInt(4, book.getQuantity());
+        updateBookStmt.setString(5, book.getIsbn());
 
+        updateBookStmt.executeUpdate();
     }
 
     public void addBook(Book book) {

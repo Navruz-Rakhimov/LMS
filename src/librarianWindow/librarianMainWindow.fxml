@@ -88,8 +88,8 @@
                         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
                           <items>
                             <Button mnemonicParsing="false" onAction="#handleAddButton" text="Add" />
-                              <Button mnemonicParsing="false" text="Remove" />
-                              <Button mnemonicParsing="false" text="Modify" />
+                              <Button mnemonicParsing="false" onAction="#handleDeleteButton" text="Remove" />
+                              <Button mnemonicParsing="false" onAction="#handleModifyButton" text="Modify" />
                           </items>
                         </ToolBar>
                      </children>

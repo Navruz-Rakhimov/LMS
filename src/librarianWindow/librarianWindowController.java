@@ -16,11 +16,14 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import librarianWindow.booksModifyWindow.BooksModifyController;
 import staticTools.UserTracker;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +45,7 @@ public class librarianWindowController {
     }
 
     @FXML
-    public void handleAddButton(ActionEvent actionEvent) {
+    public void handleAddButton() {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(gridPane.getScene().getWindow());
 
@@ -78,6 +81,37 @@ public class librarianWindowController {
             } else {
                 books.add(book);
             }
+        }
+    }
+
+    @FXML
+    public void handleModifyButton() throws IOException, SQLException {
+        int addressIndex = booksTableView.getSelectionModel().getSelectedIndex();
+        Book book = books.get(addressIndex);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/librarianWindow/booksModifyWindow/booksModifyWindow.fxml"));
+        Parent parent = loader.load();
+        BooksModifyController dialogController = loader.<BooksModifyController>getController();
+        dialogController.setBookInfo(book, books);
+
+        Scene scene = new Scene(parent, 400, 400);
+        Stage stage = new Stage();
+        stage.setTitle("Modify Book");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+        booksTableView.refresh();
+    }
+
+    @FXML
+    public void handleDeleteButton() {
+        try {
+            int addressIndex = booksTableView.getSelectionModel().getSelectedIndex();
+            Book book = books.get(addressIndex);
+            BooksRepository.getInstance().deleteBook(book);
+            books.remove(addressIndex);
+        } catch (Exception e) {
+            System.out.println("Select an item");
         }
     }
 

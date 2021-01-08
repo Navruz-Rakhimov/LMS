@@ -10,4 +10,5 @@ module LMS {
     opens adminWindow.adminBookWindow;
     opens adminWindow.adminLibrarianWindow;
     opens librarianWindow;
+    opens librarianWindow.booksModifyWindow;
 }
