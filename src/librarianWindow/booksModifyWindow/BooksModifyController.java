@@ -13,7 +13,6 @@ import java.sql.SQLException;
 
 public class BooksModifyController {
     private Book book;
-    private ObservableList<Book> books;
 
     @FXML
     private TextField isbnTextField;
@@ -30,9 +29,8 @@ public class BooksModifyController {
     public void initialize(){}
 
     @FXML
-    public void setBookInfo(Book bookInfo, ObservableList<Book> books){
+    public void setBookInfo(Book bookInfo){
         book = bookInfo;
-        this.books = books;
 
         isbnTextField.setText(bookInfo.getIsbn());
         titleTextField.setText(bookInfo.getTitle());

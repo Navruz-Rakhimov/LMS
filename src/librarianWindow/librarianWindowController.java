@@ -17,11 +17,11 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import librarianWindow.booksModifyWindow.BooksModifyController;
+import librarianWindow.studentModifyWindow.StudentModifyWindowController;
 import staticTools.UserTracker;
 import user.User;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +36,7 @@ public class librarianWindowController {
     @FXML
     private TableView<Book> booksTableView;
     @FXML
-    private TableView<User> studentsTabView;
+    private TableView<User> studentsTableView;
 
 
     @FXML
@@ -45,7 +45,7 @@ public class librarianWindowController {
         books = BooksRepository.getInstance().getAllBooks();
         students = UsersRepository.getInstance().getAllStudents();
         booksTableView.setItems(books);
-        studentsTabView.setItems(students);
+        studentsTableView.setItems(students);
     }
 
     // books tab
@@ -97,7 +97,7 @@ public class librarianWindowController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/librarianWindow/booksModifyWindow/booksModifyWindow.fxml"));
         Parent parent = loader.load();
         BooksModifyController dialogController = loader.<BooksModifyController>getController();
-        dialogController.setBookInfo(book, books);
+        dialogController.setBookInfo(book);
 
         Scene scene = new Scene(parent, 400, 400);
         Stage stage = new Stage();
@@ -174,5 +174,45 @@ public class librarianWindowController {
                 alert.showAndWait();
             }
         }
+    }
+
+    @FXML
+    public void handleDeleteStudentButton(ActionEvent actionEvent) {
+        try {
+            int addressIndex = studentsTableView.getSelectionModel().getSelectedIndex();
+            User student = students.get(addressIndex);
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Student");
+            alert.setHeaderText("Are you sure you want to delete the student: " + student.getFirstName() + " " + student.getLastName());
+            Optional<ButtonType> result  = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                UsersRepository.getInstance().deleteUser(student);
+                students.remove(addressIndex);
+            }
+        } catch (Exception e) {
+            System.out.println("Select an item");
+        }
+    }
+
+    @FXML
+    public void handleModifyStudentButton(ActionEvent act) throws IOException {
+        int addressIndex = studentsTableView.getSelectionModel().getSelectedIndex();
+        User user = students.get(addressIndex);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/librarianWindow/studentModifyWindow/studentModifyWindow.fxml"));
+        Parent parent = loader.load();
+        StudentModifyWindowController dialogController = loader.<StudentModifyWindowController>getController();
+        dialogController.setUserParams(user);
+
+        Scene scene = new Scene(parent, 400, 400);
+        Stage stage = new Stage();
+        stage.setTitle("Modify Student Info");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+
+        studentsTableView.refresh();
     }
 }
