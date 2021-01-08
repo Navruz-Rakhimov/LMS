@@ -3,7 +3,6 @@ package authentication;
 import user.Librarian;
 import user.Student;
 import user.User;
-import book.Book;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -18,26 +17,41 @@ public class UsersRepository {
     private final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
     private final String GET_ALL_STUDENTS_QUERY = "SELECT * FROM users WHERE role=2";
     private final String GET_ALL_LIBRARIANS_QUERY = "SELECT * FROM users WHERE role=1";
-    private final String GET_ALL_ADMINS_QUERY = "SELECT * FROM users WHERE role=0";
-    private final String GET_USER_QUERY = "SELECT * FROM users where username=?";
-    private final String ADD_USER_QUERY = "INSERT INTO users(username, password, firstName, lastName, email, role) VALUES (?,?,?,?,?,?)";
 
-    private final String DELETE_USER_QUERY = "DELETE FROM users WHERE username=?";
+    // get user using email (second primary key in table 'users')
+    private final String GET_USER_QUERY_EMAIL = "SELECT * FROM users where email=?";
+    private final String GET_USER_ID = "SELECT userId FROM users WHERE email=?";
+
+    // get user using userId
+    private final String GET_USER_QUERY_ID = "SELECT * FROM users WHERE userId=?";
+
+    private final String ADD_USER_QUERY = "INSERT INTO users(email, password, firstName, lastName, role) VALUES (?,?,?,?,?)";
+
+    // you can delete user only with userId (because it is a foreign key in other tables)
+    private final String DELETE_USER_QUERY = "DELETE FROM users WHERE userId=?";
+    /*
     private final String DELETE_FROM_BOOKS_QUERY = "DELETE FROM books WHERE isbn=?";
     private final String DELETE_FROM_STUDENT_BOOK_QUERY = "DELETE FROM studentBook WHERE isbn=?";
     private final String DELETE_FROM_OVERDUE_BOOK_QUERY = "DELETE FROM overdueBooks WHERE isbn=?";
     private final String DELETE_FROM_AUTHOR_ISBN_QUERY = "DELETE FROM authorISBN WHERE isbn=?";
+    */
 
-    private final String GET_ROLE_QUERY = "SELECT role FROM Users where username=?";
+    // get role to display the right page for the right user
+    private final String GET_ROLE_QUERY = "SELECT role FROM users where email=?";
+    private final String GET_LAST_ID = "SELECT MAX(userId) FROM users";
 
     private PreparedStatement getAllUsersStmt;
     private PreparedStatement getAllStudentsStmt;
     private PreparedStatement getAllLibrariansStmt;
-    private PreparedStatement getAllAdminsStmt;
-    private PreparedStatement getUserStmt;
+
+    private PreparedStatement getUserWithEmailStmt;
+    private PreparedStatement getUserWithIdStmt;
+    private PreparedStatement getUserIdStmt;
+
     private PreparedStatement addUserStmt;
     private PreparedStatement getRoleStmt;
     private PreparedStatement deleteUserStmt;
+    private PreparedStatement getLastIdStmt;
 
     private static UsersRepository instance;
 
@@ -48,11 +62,15 @@ public class UsersRepository {
             getAllUsersStmt = conn.prepareStatement(GET_ALL_USERS_QUERY);
             getAllStudentsStmt = conn.prepareStatement(GET_ALL_STUDENTS_QUERY);
             getAllLibrariansStmt = conn.prepareStatement(GET_ALL_LIBRARIANS_QUERY);
-            getAllAdminsStmt = conn.prepareStatement(GET_ALL_ADMINS_QUERY);
-            getUserStmt = conn.prepareStatement(GET_USER_QUERY);
+            getUserWithEmailStmt = conn.prepareStatement(GET_USER_QUERY_EMAIL);
+            getUserWithIdStmt = conn.prepareStatement(GET_USER_QUERY_ID);
+
             addUserStmt = conn.prepareStatement(ADD_USER_QUERY);
             getRoleStmt = conn.prepareStatement(GET_ROLE_QUERY);
             deleteUserStmt = conn.prepareStatement(DELETE_USER_QUERY);
+            getLastIdStmt = conn.prepareStatement(GET_LAST_ID);
+            getUserIdStmt = conn.prepareCall(GET_USER_ID);
+
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -68,33 +86,38 @@ public class UsersRepository {
 
     public boolean addUser(User user) {
         try {
-            addUserStmt.setString(1, user.getUsername());
+            addUserStmt.setString(1, user.getEmail());
             addUserStmt.setString(2, user.getPassword());
             addUserStmt.setString(3, user.getFirstName());
             addUserStmt.setString(4, user.getLastName());
-            addUserStmt.setString(5, user.getEmail());
-            addUserStmt.setInt(6, user.getRole());
+            addUserStmt.setInt(5, user.getRole());
 
-            if (addUserStmt.executeUpdate() > 0) {
-                return true;
-            } else {
-                return false;
+            // to make sure there is no one with such email
+
+            if (isUnique(user.getEmail())) {
+                if (addUserStmt.executeUpdate() > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return false;
         }
+
+        return false;
     }
 
     public boolean verifyUser(User user) {
         try {
-            getUserStmt.setString(1, user.getUsername());
+            // we use email and password for authorization
+            getUserWithEmailStmt.setString(1, user.getEmail());
 
-            if (getUserStmt.execute()) {
-                ResultSet rs = getUserStmt.getResultSet();
+            if (getUserWithEmailStmt.execute()) {
+                ResultSet rs = getUserWithEmailStmt.getResultSet();
                 if (rs.next()) {
-                    System.out.println("Username is correct");
+                    System.out.println("Email is correct");
                     if (rs.getString("password").equals(user.getPassword())) {
                         System.out.println("Password is correct");
                         return true;
@@ -102,7 +125,7 @@ public class UsersRepository {
                     System.out.println("Password is incorrect!");
                 }
                 else {
-                    System.out.println("Username is incorrect");
+                    System.out.println("Email is incorrect");
                     return false;
                 }
             }
@@ -112,10 +135,23 @@ public class UsersRepository {
         return false;
     }
 
+    public String getUserId(User user) {
+        try {
+            getUserIdStmt.setString(1, user.getEmail());
+            ResultSet rs = getUserIdStmt.executeQuery();
+            if(rs.next()) {
+                return rs.getString("userId");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
     public int getUserRole(User user) {
         ResultSet rs = null;
         try {
-            getRoleStmt.setString(1, user.getUsername());
+            getRoleStmt.setString(1, user.getEmail());
             rs = getRoleStmt.executeQuery();
 
             if (rs.next()) {
@@ -130,32 +166,72 @@ public class UsersRepository {
 
     public ObservableList<User> getAllStudents() {
         ObservableList<User> students = FXCollections.observableArrayList();
-
         try {
             ResultSet rs = getAllStudentsStmt.executeQuery();
-
             while (rs.next()) {
                 students.add(new Student(
-                        rs.getString("username"),
+                        rs.getString("userId"),
+                        rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("firstName"),
-                        rs.getString("lastName"),
-                        rs.getString("email"))
+                        rs.getString("lastName")
+                        )
                 );
             }
             return students;
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return null;
         }
     }
 
+    public ObservableList<User> getAllLibrarians() {
+        ObservableList<User> librarians = FXCollections.observableArrayList();
+        try {
+            ResultSet rs = getAllLibrariansStmt.executeQuery();
+            while (rs.next()) {
+                librarians.add(new Librarian(
+                        rs.getString("userId"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName")
+                        )
+                );
+            }
+            return librarians;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean updateUser(User oldUser, User newUser) {
+        try {
+            PreparedStatement updateStmt = conn.prepareStatement("UPDATE users  SET email=?, password=?, " +
+                    "firstName=?, lastName=? WHERE userId=?");
+            updateStmt.setString(1, newUser.getEmail());
+            updateStmt.setString(2, newUser.getPassword());
+            updateStmt.setString(3, newUser.getFirstName());
+            updateStmt.setString(4, newUser.getLastName());
+            updateStmt.setString(5, oldUser.getUserId());
+
+            if (isUnique(newUser.getEmail()) || newUser.getEmail().equals(oldUser.getEmail())) {
+                updateStmt.execute();
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+
     public void deleteUser(User user) {
         try {
-            deleteUserStmt.setString(1, user.getUsername());
-            PreparedStatement statement1 = conn.prepareStatement("DELETE FROM overdueBooks WHERE username='" + user.getUsername()+"'");
-            PreparedStatement statement2 = conn.prepareStatement("DELETE FROM studentBook WHERE username='" + user.getUsername()+"'");
+            deleteUserStmt.setString(1, user.getUserId());
+            PreparedStatement statement1 = conn.prepareStatement("DELETE FROM overdueBooks WHERE userId=" + user.getUserId());
+            PreparedStatement statement2 = conn.prepareStatement("DELETE FROM studentBook WHERE userId=" + user.getUserId());
             if (user.getRole() == 1) {
                 deleteUserStmt.execute();
             } else {
@@ -168,26 +244,14 @@ public class UsersRepository {
         }
     }
 
-    public ObservableList<User> getAllLibrarians() {
-        ObservableList<User> librarians = FXCollections.observableArrayList();
-
+    private boolean isUnique(String email) {
         try {
-            ResultSet rs = getAllLibrariansStmt.executeQuery();
-
-            while (rs.next()) {
-                librarians.add(new Librarian(
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("firstName"),
-                        rs.getString("lastName"),
-                        rs.getString("email"))
-                );
-            }
-            return librarians;
-
+            getUserWithEmailStmt.setString(1, email);
+            ResultSet rs = getUserWithEmailStmt.executeQuery();
+            return !rs.next();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            return null;
         }
+        return false;
     }
 }

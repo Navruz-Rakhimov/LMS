@@ -32,7 +32,7 @@ public class SignUpController {
 
     @FXML
     public void handleSignUp(ActionEvent actionEvent) {
-        String signUpUsername = usernameTxt.getText().trim();
+        /*String signUpUsername = usernameTxt.getText().trim();
         String signUpPassword = passwordTxt.getText().trim();
         String signUpEmail = emailTxt.getText().trim();
 
@@ -43,7 +43,7 @@ public class SignUpController {
             } else {
                 warningLabel.setText("This username is taken");
             }
-        }
+        }*/
     }
 
     @FXML
