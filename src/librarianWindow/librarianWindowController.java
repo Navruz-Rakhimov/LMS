@@ -5,6 +5,7 @@ import adminWindow.NewUserDialogController;
 import authentication.UsersRepository;
 import book.Book;
 import book.BooksRepository;
+import book.BorrowedBook;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +30,7 @@ import java.util.Optional;
 public class librarianWindowController {
     ObservableList<User> students;
     ObservableList<Book> books;
+    ObservableList<BorrowedBook> borrowedBooks;
     @FXML
     private Label userEmailLabel;
     @FXML
@@ -37,15 +39,18 @@ public class librarianWindowController {
     private TableView<Book> booksTableView;
     @FXML
     private TableView<User> studentsTableView;
-
+    @FXML
+    private TableView<BorrowedBook> borrowedBookTableView;
 
     @FXML
     public void initialize(){
         userEmailLabel.setText(UserTracker.getLastTrackedUser());
         books = BooksRepository.getInstance().getAllBooks();
+        borrowedBooks = BooksRepository.getInstance().getBorrowedBooks();
         students = UsersRepository.getInstance().getAllStudents();
         booksTableView.setItems(books);
         studentsTableView.setItems(students);
+        borrowedBookTableView.setItems(borrowedBooks);
     }
 
     // books tab
@@ -218,5 +223,4 @@ public class librarianWindowController {
 
 
     // Borrowed books tab
-
 }

@@ -156,6 +156,32 @@
                       <RowConstraints maxHeight="393.6000244140625" minHeight="10.0" prefHeight="391.99998779296874" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="206.60001220703126" minHeight="10.0" prefHeight="32.00001220703126" vgrow="SOMETIMES" />
                     </rowConstraints>
+                     <children>
+                        <TableView fx:id="borrowedBookTableView" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                              <TableColumn prefWidth="150.0" text="ISBN">
+                                  <cellValueFactory>
+                                      <PropertyValueFactory property="isbn" />
+                                  </cellValueFactory>
+                              </TableColumn>
+                              <TableColumn prefWidth="300.0" text="Title">
+                                  <cellValueFactory>
+                                      <PropertyValueFactory property="title" />
+                                  </cellValueFactory>
+                              </TableColumn>
+                              <TableColumn prefWidth="150.0" text="Borrowed Amount">
+                                  <cellValueFactory>
+                                      <PropertyValueFactory property="borrowedAmount" />
+                                  </cellValueFactory>
+                              </TableColumn>
+                          </columns>
+                        </TableView>
+                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
+                          <items>
+                            <Button mnemonicParsing="false" text="Button" />
+                          </items>
+                        </ToolBar>
+                     </children>
                   </GridPane>
                </content></Tab>
             <Tab text="Book Loan">

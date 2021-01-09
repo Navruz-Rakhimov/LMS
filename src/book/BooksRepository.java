@@ -21,6 +21,9 @@ public class BooksRepository {
     private final String DELETE_FROM_STUDENT_BOOK_QUERY = "DELETE FROM studentBook WHERE isbn=?";
     private final String DELETE_FROM_OVERDUE_BOOK_QUERY = "DELETE FROM overdueBooks WHERE isbn=?";
     private final String DELETE_FROM_AUTHOR_ISBN_QUERY = "DELETE FROM authorISBN WHERE isbn=?";
+    private final String GET_ALL_BORROWED_BOOKS = "SELECT * FROM STUDENTBOOK";
+    private final String GET_BOOK_QUERY = "SELECT * FROM books WHERE isbn=?";
+    private final String GET_USER_ID_BORROWED_BOOKS = "SELECT * FROM STUDENTBOOK WHERE ISBN=?";
 
     // new statements
     private final String UPDATE_BOOK_QUERY = "UPDATE books SET title=?, editionNumber=?, copyright=?, quantity=? WHERE isbn=?";
@@ -37,6 +40,8 @@ public class BooksRepository {
     private PreparedStatement getBookQuantityStmt;
     private PreparedStatement getBookAuthors;
     private PreparedStatement getAuthorWithId;
+    private PreparedStatement getBookQuery;
+    private PreparedStatement getUserIDBorrowed;
 
     private PreparedStatement addBookStmt;
     private PreparedStatement addAuthor;
@@ -52,6 +57,8 @@ public class BooksRepository {
     private PreparedStatement deleteFromAuthorIsbn;
     private PreparedStatement deleteAuthor;
 
+    private PreparedStatement getAllBorrowedBooks;
+
     private static BooksRepository instance;
 
     private BooksRepository() {
@@ -63,6 +70,8 @@ public class BooksRepository {
             getBookAuthors = conn.prepareStatement(GET_BOOK_AUTHORS);
             getAuthorWithId = conn.prepareStatement(GET_AUTHORS_WITH_ID);
             getAuthor = conn.prepareStatement(GET_AUTHOR);
+            getBookQuery = conn.prepareStatement(GET_BOOK_QUERY);
+            getUserIDBorrowed = conn.prepareStatement(GET_USER_ID_BORROWED_BOOKS);
 
 
             addBookStmt = conn.prepareStatement(ADD_BOOK_QUERY);
@@ -79,7 +88,7 @@ public class BooksRepository {
             deleteFromAuthorIsbn = conn.prepareStatement(DELETE_FROM_AUTHOR_ISBN_QUERY);
             deleteAuthor = conn.prepareStatement(DELETE_AUTHOR_QUERY);
 
-
+            getAllBorrowedBooks = conn.prepareStatement(GET_ALL_BORROWED_BOOKS);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -262,5 +271,41 @@ public class BooksRepository {
             throwables.printStackTrace();
         }
         return "";
+    }
+
+    // return a list of borrowed books
+    public ObservableList<BorrowedBook> getBorrowedBooks(){
+        ResultSet resultSet = null;
+        ObservableList<BorrowedBook> list = FXCollections.observableArrayList();
+
+        try {
+            resultSet = getAllBorrowedBooks.executeQuery();
+            ArrayList<String> isbns = new ArrayList<String >();
+            while (resultSet.next()){
+                BorrowedBook book = null;
+                getBookQuery.setString(1, resultSet.getString("isbn"));
+                ResultSet temp = getBookQuery.executeQuery();
+                if (temp.next()){
+                    book = new BorrowedBook(temp.getString("isbn"), temp.getString("title"), 1);
+                }
+                if (!isbns.contains(book.getIsbn())){
+                    isbns.add(temp.getString("isbn"));
+                    book.resetAmount();
+                    list.add(book);
+                }else{
+                    for (BorrowedBook bookT : list){
+                        if (bookT.getIsbn().equals(book.getIsbn())){
+                            bookT.incrementAmount();
+                        }
+                    }
+//                    list.get(list.indexOf(book)).incrementAmount();
+//                    amount += 1;
+                }
+            }
+            return list;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 }
