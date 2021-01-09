@@ -68,7 +68,7 @@ public class BooksRepository {
             addBookStmt = conn.prepareStatement(ADD_BOOK_QUERY);
             addAuthor = conn.prepareStatement(ADD_AUTHOR_QUERY);
             checkStmt = conn.prepareStatement(CHECK_IF_EXISTS_QUERY);
-          
+
             updateQuantityStmt = conn.prepareStatement(UPDATE_QUANTITY_QUERY);
 
             updateBookStmt = conn.prepareStatement(UPDATE_BOOK_QUERY);
@@ -101,7 +101,7 @@ public class BooksRepository {
             rs = getAllBooksStmt.executeQuery();
             // isbn, title, editionNumber, copyright, quantity
             Book book = null;
-            while(rs.next()) {
+            while (rs.next()) {
                 book = new Book(rs.getString("isbn"), rs.getString("title"), rs.getString("editionNumber"),
                         rs.getString("copyright"), rs.getInt("quantity"));
                 list.add(book);
@@ -121,7 +121,7 @@ public class BooksRepository {
             ResultSet rs1 = getBookAuthors.executeQuery();
             ObservableList<Author> authors = FXCollections.observableArrayList();
             Author author = null;
-            while(rs1.next()) {
+            while (rs1.next()) {
                 author = new Author(rs1.getString("authorId"), rs1.getString("firstName"), rs1.getString("lastName"));
                 authors.add(author);
             }
@@ -148,11 +148,12 @@ public class BooksRepository {
             List<Author> authorsToDelete = new ArrayList<>();
 
             ResultSet rs = null;
-            for (Author author: authors) {
+            for (Author author : authors) {
                 System.out.println("INSIDE FOR LOOP (DELETE BOOK)");
                 getAuthorWithId.setString(1, author.getAuthorId());
                 // there must be only one author with such id if we want to delete it from authors table as well
-                rs = getAuthorWithId.executeQuery(); rs.next();
+                rs = getAuthorWithId.executeQuery();
+                rs.next();
                 if (!rs.next()) {
                     authorsToDelete.add(author);
                 }
@@ -161,7 +162,7 @@ public class BooksRepository {
             // 1. we get authors to delete from authorISBN table
             // 2. we delete authors from authorISBN table
             // 3. we delete authors from authors table
-            for (Author author: authorsToDelete) {
+            for (Author author : authorsToDelete) {
                 deleteAuthor.setString(1, author.getAuthorId());
                 deleteAuthor.execute();
             }
@@ -175,16 +176,11 @@ public class BooksRepository {
     }
 
 
-    // updates information of a book with provided isbn with a newBook
-    public void updateBook(String isbn, Book newBook) {
-
-    }
-
     // inserts information about book and its authors into authorISBN table
     public void addAuthorIsbn(Book book, List<Author> authors) {
         try {
             PreparedStatement addAuthorIsbn = conn.prepareStatement(ADD_AUTHOR_ISBN);
-            for (Author author: authors) {
+            for (Author author : authors) {
                 addAuthorIsbn.setString(1, author.getAuthorId());
                 addAuthorIsbn.setString(2, book.getIsbn());
                 addAuthorIsbn.execute();
@@ -199,11 +195,11 @@ public class BooksRepository {
     public void addAuthors(List<Author> authors) {
         ResultSet rs1 = null;
         try {
-            for (Author author: authors) {
+            for (Author author : authors) {
                 getAuthor.setString(1, author.getFirstName());
                 getAuthor.setString(2, author.getLastName());
                 rs1 = getAuthor.executeQuery();
-                if(!rs1.next()) {
+                if (!rs1.next()) {
                     addAuthor.setString(1, author.getFirstName());
                     addAuthor.setString(2, author.getLastName());
                     addAuthor.execute();
@@ -212,17 +208,18 @@ public class BooksRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
 
-    //public void updateBook(Book book) throws SQLException {
-        //updateBookStmt.setString(1, book.getTitle());
-        //updateBookStmt.setString(2, book.getEdition());
-        //updateBookStmt.setString(3, book.getCopyright());
-        //updateBookStmt.setInt(4, book.getQuantity());
-        //updateBookStmt.setString(5, book.getIsbn());
+    // updates information of a book with provided isbn
+    public void updateBook(Book book) throws SQLException {
+    updateBookStmt.setString(1, book.getTitle());
+    updateBookStmt.setString(2, book.getEdition());
+    updateBookStmt.setString(3, book.getCopyright());
+    updateBookStmt.setInt(4, book.getQuantity());
+    updateBookStmt.setString(5, book.getIsbn());
 
-        //updateBookStmt.executeUpdate();
-
-    //}
+    updateBookStmt.executeUpdate();
+    }
 
     public void addBook(Book book) {
         try {
