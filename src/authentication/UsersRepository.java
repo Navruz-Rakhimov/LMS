@@ -14,6 +14,16 @@ public class UsersRepository {
     String connectionURL = "jdbc:derby:./db/" + dbName;
     Connection conn = null;
 
+    public String getCurrentUserEmail() {
+        return currentUserEmail;
+    }
+
+    public void setCurrentUserEmail(String currentUserEmail) {
+        this.currentUserEmail = currentUserEmail;
+    }
+
+    private String currentUserEmail;
+
     private final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
     private final String GET_ALL_STUDENTS_QUERY = "SELECT * FROM users WHERE role=2";
     private final String GET_ALL_LIBRARIANS_QUERY = "SELECT * FROM users WHERE role=1";
@@ -21,6 +31,7 @@ public class UsersRepository {
     // get user using email (second primary key in table 'users')
     private final String GET_USER_QUERY_EMAIL = "SELECT * FROM users where email=?";
     private final String GET_USER_ID = "SELECT userId FROM users WHERE email=?";
+    private final String GET_BLOCKED = "SELECT * FROM blockedStudents WHERE userId=?";
 
     // get user using userId
     private final String GET_USER_QUERY_ID = "SELECT * FROM users WHERE userId=?";
@@ -47,6 +58,7 @@ public class UsersRepository {
     private PreparedStatement getUserWithEmailStmt;
     private PreparedStatement getUserWithIdStmt;
     private PreparedStatement getUserIdStmt;
+    private PreparedStatement getBlocked;
 
     private PreparedStatement addUserStmt;
     private PreparedStatement getRoleStmt;
@@ -70,7 +82,7 @@ public class UsersRepository {
             deleteUserStmt = conn.prepareStatement(DELETE_USER_QUERY);
             getLastIdStmt = conn.prepareStatement(GET_LAST_ID);
             getUserIdStmt = conn.prepareCall(GET_USER_ID);
-
+            getBlocked = conn.prepareStatement(GET_BLOCKED);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -82,6 +94,49 @@ public class UsersRepository {
             instance = new UsersRepository();
         }
         return instance;
+    }
+
+    boolean isBlocked(User user) {
+        try {
+            getBlocked.setString(1, user.getUserId());
+            ResultSet rs = getBlocked.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public Student getStudent(String email) {
+        try {
+            getUserWithEmailStmt.setString(1, email);
+            ResultSet rs = getUserWithEmailStmt.executeQuery();
+            if (rs.next()) {
+                Student student = new Student(rs.getString("userId"), rs.getString("email"), rs.getString("password"),
+                        rs.getString("firstName"), rs.getString("lastName"));
+                student.setBlocked(isBlocked(student));
+                return student;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public Librarian getLibrarian(String email) {
+        try {
+            getUserWithEmailStmt.setString(1, email);
+            ResultSet rs = getUserWithEmailStmt.executeQuery();
+            if (rs.next()) {
+                return new Librarian(rs.getString("userId"), rs.getString("email"), rs.getString("password"),
+                        rs.getString("firstName"), rs.getString("lastName"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
     public boolean addUser(User user) {
@@ -226,7 +281,6 @@ public class UsersRepository {
         return false;
     }
 
-
     public void deleteUser(User user) {
         try {
             deleteUserStmt.setString(1, user.getUserId());
@@ -254,4 +308,5 @@ public class UsersRepository {
         }
         return false;
     }
+
 }

@@ -8,4 +8,11 @@ public class Student extends User {
         isBlocked = false;
     }
 
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
 }
