@@ -2,7 +2,10 @@ package book;
 
 import authentication.UsersRepository;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import librarianWindow.StudentsBorrowed;
+import user.User;
 
 import java.sql.*;
 import java.util.*;
@@ -303,6 +306,23 @@ public class BooksRepository {
                 }
             }
             return list;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public ObservableList<StudentsBorrowed> getStudentsWhoBorrowed(String isbn){
+        ObservableList<StudentsBorrowed> students = FXCollections.observableArrayList();
+        try {
+            getUserIDBorrowed.setString(1, isbn);
+            ResultSet results = getUserIDBorrowed.executeQuery();
+            while (results.next()){
+                String userID = results.getString("userID");
+                StudentsBorrowed user = UsersRepository.getInstance().getUser(userID);
+                students.add(user);
+            }
+            return students;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

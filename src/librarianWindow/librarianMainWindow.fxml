@@ -178,7 +178,7 @@
                         </TableView>
                         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
                           <items>
-                            <Button mnemonicParsing="false" text="Button" />
+                            <Button mnemonicParsing="false" onAction="#handleViewBorrowed" text="View" />
                           </items>
                         </ToolBar>
                      </children>

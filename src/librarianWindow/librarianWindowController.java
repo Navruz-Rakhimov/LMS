@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import librarianWindow.booksModifyWindow.BooksModifyController;
+import librarianWindow.borrowedBooksDialogWindow.BorrowedBooksController;
 import librarianWindow.studentModifyWindow.StudentModifyWindowController;
 import staticTools.UserTracker;
 import user.User;
@@ -223,4 +224,21 @@ public class librarianWindowController {
 
 
     // Borrowed books tab
+    @FXML
+    public void handleViewBorrowed() throws IOException {
+        int addressIndex = borrowedBookTableView.getSelectionModel().getSelectedIndex();
+        BorrowedBook book = borrowedBooks.get(addressIndex);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/librarianWindow/borrowedBooksDialogWindow/borrowedBooks.fxml"));
+        Parent parent = loader.load();
+        BorrowedBooksController dialogController = loader.<BorrowedBooksController>getController();
+        dialogController.setStudentsInfo(BooksRepository.getInstance().getStudentsWhoBorrowed(book.getIsbn()));
+
+        Scene scene = new Scene(parent, 400, 400);
+        Stage stage = new Stage();
+        stage.setTitle("Borrow Info");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
 }

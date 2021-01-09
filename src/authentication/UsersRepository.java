@@ -1,5 +1,6 @@
 package authentication;
 
+import librarianWindow.StudentsBorrowed;
 import user.Librarian;
 import user.Student;
 import user.User;
@@ -107,6 +108,20 @@ public class UsersRepository {
         }
 
         return false;
+    }
+
+    public StudentsBorrowed getUser(String id) throws SQLException {
+        getUserWithIdStmt.setInt(1, Integer.parseInt(id));
+        ResultSet result = getUserWithIdStmt.executeQuery();
+        if (result.next()){
+            StudentsBorrowed user = new StudentsBorrowed(
+                    result.getString("email"),
+                    result.getString("firstName"),
+                    result.getString("lastName")
+            );
+            return user;
+        }
+        return null;
     }
 
     public boolean verifyUser(User user) {

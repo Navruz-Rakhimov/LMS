@@ -13,4 +13,5 @@ module LMS {
     opens librarianWindow;
     opens librarianWindow.booksModifyWindow;
     opens librarianWindow.studentModifyWindow;
+    opens librarianWindow.borrowedBooksDialogWindow;
 }
