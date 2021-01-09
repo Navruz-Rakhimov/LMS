@@ -1,6 +1,8 @@
 package adminWindow.adminBookWindow;
 
 import adminWindow.NewBookDialogController;
+import adminWindow.viewDialogs.BookViewController;
+import book.Author;
 import book.Book;
 import book.BooksRepository;
 import javafx.collections.ObservableList;
@@ -51,7 +53,6 @@ public class AdminBookController {
             Stage stage = (Stage) source.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,7 +76,27 @@ public class AdminBookController {
         tableView.setItems(books);
     }
 
+    // Solving...
     public void handleViewButton(ActionEvent actionEvent) {
+        int addressIndex = tableView.getSelectionModel().getSelectedIndex();
+        Book book = books.get(addressIndex);
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(gridPane.getScene().getWindow());
+        dialog.setTitle("View Book");
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/adminWindow/viewDialogs/bookViewDialogFxml.fxml"));
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        BookViewController controller = fxmlLoader.getController();
+        controller.setBook(book);
+        dialog.showAndWait();
     }
 
     public void handleModifyButton(ActionEvent actionEvent) {
@@ -105,11 +126,19 @@ public class AdminBookController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             NewBookDialogController controller = fxmlLoader.getController();
 
+            List<Author> authors = controller.getAuthors();
             Book book = controller.getBook();
 
-            System.out.println("BOOK: " + book.getIsbn() + " " + book.getTitle() + " " + book.getEdition() + " " + book.getCopyright() + " " + book.getQuantity());
+            // System.out.println("BOOK: " + book.getIsbn() + " " + book.getTitle() + " " + book.getEdition() + " " + book.getCopyright() + " " + book.getQuantity());
 
             BooksRepository.getInstance().addBook(book);
+            BooksRepository.getInstance().addAuthors(authors);
+
+            for (Author author: authors) {
+                author.setAuthorId(BooksRepository.getInstance().getAuthorId(author));
+            }
+
+            BooksRepository.getInstance().addAuthorIsbn(book, authors);
             // .....
             if (containsIsbn(books, book.getIsbn())) {
                 books = BooksRepository.getInstance().getAllBooks();

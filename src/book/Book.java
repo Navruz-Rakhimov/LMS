@@ -5,8 +5,6 @@ import java.util.Set;
 // will be saved in table books;
 public class Book {
 
-//    Set<Author> authorSet; // will saved in table 'authors'
-
     private String isbn;
     private String title;
     private String edition;

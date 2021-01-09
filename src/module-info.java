@@ -9,6 +9,7 @@ module LMS {
     opens user;
     opens adminWindow.adminBookWindow;
     opens adminWindow.adminLibrarianWindow;
+    opens adminWindow.viewDialogs;
     opens librarianWindow;
     opens librarianWindow.booksModifyWindow;
     opens librarianWindow.studentModifyWindow;

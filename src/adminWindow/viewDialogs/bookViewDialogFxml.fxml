@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<DialogPane prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminWindow.viewDialogs.BookViewController">
+
+    <headerText>
+        Book details
+    </headerText>
+    <content>
+        <VBox>
+            <GridPane hgap="5" vgap="5">
+                <padding>
+                    <Insets bottom="10" left="10" right="10" top="10" />
+                </padding>
+                <Label text="ISBN" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="isbn" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                <Label text="Title" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <TextField fx:id="title" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                <Label text="Edition" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="edition" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Copyright" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <TextField fx:id="copyright" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                <Label text="Quantity" GridPane.rowIndex="4" />
+                <TextField fx:id="quantity" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+            </GridPane>
+            <Label text="Authors" />
+            <TableView fx:id="table">
+            <columns>
+               <TableColumn prefWidth="100" text="Author ID">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="authorId" />
+                   </cellValueFactory>
+               </TableColumn>
+                <TableColumn prefWidth="150" text="First Name">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="firstName" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn prefWidth="150" text="Last Name">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="lastName" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns></TableView>
+        </VBox>
+    </content>
+</DialogPane>
