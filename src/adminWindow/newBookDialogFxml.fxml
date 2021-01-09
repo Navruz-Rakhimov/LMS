@@ -13,8 +13,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<DialogPane prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminWindow.NewBookDialogController">
+<DialogPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" style="-fx-background-color: #0277BD; -fx-border-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="adminWindow.NewBookDialogController">
 
     <headerText>
         Enter new book details
@@ -22,29 +23,44 @@
 
     <content>
         <VBox spacing="5">
-            <GridPane hgap="10" vgap="10">
+            <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
                 <padding>
                     <Insets bottom="10" left="10" right="10" top="10" />
                 </padding>
-                <Label text="ISBN" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <TextField fx:id="isbn" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <Label text="ISBN" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0">
+               <font>
+                  <Font name="Century Gothic" size="15.0" />
+               </font></Label>
+                <TextField fx:id="isbn" prefWidth="144.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Title" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <Label text="Title" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="0">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
                 <TextField fx:id="title" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-                <Label text="Edition" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label text="Edition" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
                 <TextField fx:id="edition" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label text="Copyright" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label text="Copyright" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
                 <TextField fx:id="copyright" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-                <Label text="Quantity" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Label text="Quantity" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
                 <TextField fx:id="quantity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <columnConstraints>
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
+               <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="79.0" minWidth="50.0" prefWidth="60.0" />
+               <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="152.0" minWidth="114.0" prefWidth="150.0" />
+               <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="84.0" minWidth="57.0" prefWidth="66.0" />
+               <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="195.0" minWidth="50.0" prefWidth="168.0" />
             </columnConstraints>
             <rowConstraints>
                <RowConstraints />
@@ -52,8 +68,7 @@
                <RowConstraints />
             </rowConstraints>
             </GridPane>
-            <Label text="Authors" />
-            <TableView fx:id="table" prefHeight="150.0" prefWidth="480.0">
+            <TableView fx:id="table" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="480.0">
                 <columns>
                    <!-- <TableColumn prefWidth="100" text="Author ID">
                         <cellValueFactory>
@@ -72,12 +87,15 @@
                     </TableColumn>
                 </columns>
             </TableView>
-            <HBox spacing="10">
+            <HBox alignment="BOTTOM_CENTER" prefHeight="43.0" prefWidth="478.0" spacing="10" VBox.vgrow="ALWAYS">
             <children>
                <TextField fx:id="firstName" prefHeight="25.0" prefWidth="199.0" promptText="First Name" />
                <TextField fx:id="lastName" prefHeight="25.0" prefWidth="164.0" promptText="Last Name" />
                <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleAddButton" text="Add" />
-            </children></HBox>
+            </children>
+            <opaqueInsets>
+               <Insets top="10.0" />
+            </opaqueInsets></HBox>
         </VBox>
 
     </content>
