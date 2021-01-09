@@ -184,7 +184,7 @@
                      </children>
                   </GridPane>
                </content></Tab>
-            <Tab text="Book Loan">
+            <Tab text="Blocked Students">
                <content>
                   <GridPane>
                     <columnConstraints>

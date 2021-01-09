@@ -232,7 +232,7 @@ public class librarianWindowController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/librarianWindow/borrowedBooksDialogWindow/borrowedBooks.fxml"));
         Parent parent = loader.load();
         BorrowedBooksController dialogController = loader.<BorrowedBooksController>getController();
-        dialogController.setStudentsInfo(BooksRepository.getInstance().getStudentsWhoBorrowed(book.getIsbn()));
+        dialogController.setStudentsInfo(BooksRepository.getInstance().getStudentsWhoBorrowed(book.getIsbn()), book.getTitle());
 
         Scene scene = new Scene(parent, 400, 400);
         Stage stage = new Stage();
