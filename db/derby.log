@@ -1,6 +1,9 @@
 ----------------------------------------------------------------
+
 Fri Jan 08 19:28:55 UZT 2021:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-0176-e266-7788-000007505a20 
+Thu Jan 07 12:55:33 UZT 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-0176-dbd7-fab6-000007505a70 
 on database directory C:\Java Lab Assignments\LMS\db\main with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
 Loaded from file:/C:/Apache/db-derby-10.15.2.0-bin/lib/derby.jar
 java.vendor=Amazon.com Inc.
@@ -16,4 +19,8 @@ Fri Jan 08 19:29:37 UZT 2021: Shutting down Derby engine
 ----------------------------------------------------------------
 Fri Jan 08 19:29:37 UZT 2021:
 Shutting down instance a816c00e-0176-e266-7788-000007505a20 on database directory C:\Java Lab Assignments\LMS\db\main with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
+Thu Jan 07 12:55:46 UZT 2021: Shutting down Derby engine
+----------------------------------------------------------------
+Thu Jan 07 12:55:46 UZT 2021:
+Shutting down instance a816c00e-0176-dbd7-fab6-000007505a70 on database directory C:\Java Lab Assignments\LMS\db\main with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
 ----------------------------------------------------------------

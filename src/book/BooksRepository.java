@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.*;
 
 public class BooksRepository {
-    String dbName = "main";
+    String dbName = "database";
     String connectionURL = "jdbc:derby:./db/" + dbName;
     Connection conn = null;
 
@@ -21,6 +21,7 @@ public class BooksRepository {
     private final String DELETE_FROM_STUDENT_BOOK_QUERY = "DELETE FROM studentBook WHERE isbn=?";
     private final String DELETE_FROM_OVERDUE_BOOK_QUERY = "DELETE FROM overdueBooks WHERE isbn=?";
     private final String DELETE_FROM_AUTHOR_ISBN_QUERY = "DELETE FROM authorISBN WHERE isbn=?";
+
     // new statements
     private final String UPDATE_BOOK_QUERY = "UPDATE books SET title=?, editionNumber=?, copyright=?, quantity=? WHERE isbn=?";
     private final String ADD_AUTHOR_QUERY = "INSERT INTO authors(firstName, lastName) VALUES(?, ?)";
@@ -31,6 +32,7 @@ public class BooksRepository {
     private final String GET_AUTHOR_ID = "SELECT authorId FROM authors WHERE firstName=? AND lastName=?";
     private final String ADD_AUTHOR_ISBN = "INSERT INTO authorISBN(authorId, isbn) VALUES (?,?)";
 
+
     private PreparedStatement getAllBooksStmt;
     private PreparedStatement getBookQuantityStmt;
     private PreparedStatement getBookAuthors;
@@ -39,6 +41,7 @@ public class BooksRepository {
     private PreparedStatement addBookStmt;
     private PreparedStatement addAuthor;
     private PreparedStatement checkStmt;
+
     private PreparedStatement updateQuantityStmt;
     private PreparedStatement updateBookStmt;
     private PreparedStatement getAuthor;
@@ -65,7 +68,9 @@ public class BooksRepository {
             addBookStmt = conn.prepareStatement(ADD_BOOK_QUERY);
             addAuthor = conn.prepareStatement(ADD_AUTHOR_QUERY);
             checkStmt = conn.prepareStatement(CHECK_IF_EXISTS_QUERY);
+          
             updateQuantityStmt = conn.prepareStatement(UPDATE_QUANTITY_QUERY);
+
             updateBookStmt = conn.prepareStatement(UPDATE_BOOK_QUERY);
 
             deleteFromBooks = conn.prepareStatement(DELETE_FROM_BOOKS_QUERY);
@@ -169,6 +174,7 @@ public class BooksRepository {
         }
     }
 
+
     // updates information of a book with provided isbn with a newBook
     public void updateBook(String isbn, Book newBook) {
 
@@ -206,7 +212,17 @@ public class BooksRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-    }
+
+    //public void updateBook(Book book) throws SQLException {
+        //updateBookStmt.setString(1, book.getTitle());
+        //updateBookStmt.setString(2, book.getEdition());
+        //updateBookStmt.setString(3, book.getCopyright());
+        //updateBookStmt.setInt(4, book.getQuantity());
+        //updateBookStmt.setString(5, book.getIsbn());
+
+        //updateBookStmt.executeUpdate();
+
+    //}
 
     public void addBook(Book book) {
         try {
