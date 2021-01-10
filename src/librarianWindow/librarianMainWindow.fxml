@@ -116,6 +116,7 @@
                             <Button mnemonicParsing="false" onAction="#handleAddButton" text="Add" />
                               <Button mnemonicParsing="false" onAction="#handleDeleteButton" text="Remove" />
                               <Button mnemonicParsing="false" onAction="#handleModifyButton" text="Modify" />
+                              <Button mnemonicParsing="false" onAction="#handleLendButton" text="Lend" />
                           </items>
                         </ToolBar>
                         <ImageView fitHeight="200.0" fitWidth="197.0" opacity="0.3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">

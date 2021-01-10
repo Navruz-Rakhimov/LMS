@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import librarianWindow.booksModifyWindow.BooksModifyController;
+import librarianWindow.booksModifyWindow.LendBookWindowController;
 import librarianWindow.borrowedBooksDialogWindow.BorrowedBooksController;
 import librarianWindow.studentModifyWindow.StudentModifyWindowController;
 import staticTools.UserTracker;
@@ -52,6 +53,10 @@ public class librarianWindowController {
         students = UsersRepository.getInstance().getAllStudents();
         booksTableView.setItems(books);
         studentsTableView.setItems(students);
+        borrowedBookTableView.setItems(borrowedBooks);
+    }
+    public void reinitialize(){
+        borrowedBooks = BooksRepository.getInstance().getBorrowedBooks();
         borrowedBookTableView.setItems(borrowedBooks);
     }
 
@@ -125,6 +130,27 @@ public class librarianWindowController {
         } catch (Exception e) {
             System.out.println("Select an item");
         }
+    }
+
+    @FXML
+    public void handleLendButton() throws IOException {
+        int addressIndex = booksTableView.getSelectionModel().getSelectedIndex();
+        Book book = books.get(addressIndex);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/librarianWindow/booksModifyWindow/lendBookWindow.fxml"));
+        Parent parent = loader.load();
+        LendBookWindowController dialogController = loader.<LendBookWindowController>getController();
+        dialogController.setUpWindow(book, this.books);
+
+        Scene scene = new Scene(parent, 475, 600);
+        Stage stage = new Stage();
+        stage.setTitle("Lend Book");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+        booksTableView.refresh();
+        reinitialize();
+        borrowedBookTableView.refresh();
     }
 
     @FXML
