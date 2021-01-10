@@ -19,7 +19,7 @@
         Book details
     </headerText>
     <content>
-        <VBox style="-fx-background-color: #0277BD; -fx-border-color: white;">
+        <VBox alignment="CENTER" style="-fx-background-color: #0277BD; -fx-border-color: white;">
             <GridPane alignment="CENTER" hgap="5" vgap="5" VBox.vgrow="NEVER">
                 <padding>
                     <Insets bottom="10" left="10" right="10" top="10" />
