@@ -46,11 +46,12 @@ public class BooksModifyController {
         editedBook.setEdition(editionTextField.getText());
         editedBook.setQuantity(Integer.parseInt(quantityTextField.getText()));
         editedBook.setTitle(titleTextField.getText());
-        /*try {
+
+        try {
             BooksRepository.getInstance().updateBook(editedBook);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }*/
+        }
         closeStage(event);
     }
 
@@ -60,3 +61,4 @@ public class BooksModifyController {
         stage.close();
     }
 }
+

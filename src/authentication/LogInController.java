@@ -1,6 +1,7 @@
 package authentication;
 
 import user.User;
+import staticTools.UserTracker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,8 +57,11 @@ public class LogInController {
         String email = emailTxt.getText().trim();
         String password = passwordTxt.getText().trim();
 
+
         UsersRepository.getInstance().setCurrentUserEmail(email);
 
+        UserTracker.trackLogIn(email);
+      
         if (!email.equals("") && !password.equals("")) {
             User user = new User(email, password);
 
