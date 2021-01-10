@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class BooksRepository {
-    String dbName = "database";
+    String dbName = "main";
     String connectionURL = "jdbc:derby:./db/" + dbName;
     Connection conn = null;
 

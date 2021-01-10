@@ -12,10 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -25,9 +22,12 @@ import java.util.Optional;
 
 public class AdminBookController {
 
-
     ObservableList<Book> books;
 
+    @FXML
+    public TextField searchTxt;
+    @FXML
+    public ChoiceBox choiceBox;
     @FXML
     public GridPane gridPane;
     @FXML
@@ -44,6 +44,24 @@ public class AdminBookController {
     public void initialize() {
         books = BooksRepository.getInstance().getAllBooks();
         tableView.setItems(books);
+
+        choiceBox.getItems().add("Title");
+        choiceBox.getItems().add("ISBN");
+        choiceBox.getItems().add("Author");
+        choiceBox.getItems().add("Copyright");
+
+        choiceBox.setValue("Title");
+
+        searchTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("newValue: " + newValue);
+            if (!newValue.equals("")) {
+                books = BooksRepository.getInstance().searchBooks(choiceBox.getValue().toString(), newValue);
+                tableView.setItems(books);
+            } else {
+                books = BooksRepository.getInstance().getAllBooks();
+                tableView.setItems(books);
+            }
+        });
     }
 
     public void handleStudentsButton(ActionEvent actionEvent) {
