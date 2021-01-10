@@ -60,9 +60,11 @@ public class librarianWindowController {
         borrowedBookTableView.setItems(borrowedBooks);
         blockedStudentsTableView.setItems(blockedStudents);
     }
-    public void reinitialize(){
+    public void reinitialize() throws SQLException {
         borrowedBooks = BooksRepository.getInstance().getBorrowedBooks();
         borrowedBookTableView.setItems(borrowedBooks);
+        blockedStudents = UsersRepository.getInstance().getAllBlockedStudents();
+        blockedStudentsTableView.setItems(blockedStudents);
     }
 
     // books tab
@@ -138,7 +140,7 @@ public class librarianWindowController {
     }
 
     @FXML
-    public void handleLendButton() throws IOException {
+    public void handleLendButton() throws IOException, SQLException {
         int addressIndex = booksTableView.getSelectionModel().getSelectedIndex();
         Book book = books.get(addressIndex);
 
@@ -272,5 +274,27 @@ public class librarianWindowController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
+    }
+
+    @FXML
+    public void handleBlock() throws SQLException {
+        int addressIndex = studentsTableView.getSelectionModel().getSelectedIndex();
+        User user = students.get(addressIndex);
+        try {
+            UsersRepository.getInstance().blockStudentID(user);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        reinitialize();
+        blockedStudentsTableView.refresh();
+    }
+
+    @FXML
+    public void handleRemoveFromBlocked() throws SQLException {
+        int addressIndex = blockedStudentsTableView.getSelectionModel().getSelectedIndex();
+        User user = blockedStudents.get(addressIndex);
+        UsersRepository.getInstance().removeFromBlockedSt(user);
+        blockedStudents.remove(user);
+        reinitialize();
     }
 }

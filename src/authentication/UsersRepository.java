@@ -34,6 +34,8 @@ public class UsersRepository {
     private final String GET_USER_ID = "SELECT userId FROM users WHERE email=?";
     private final String GET_BLOCKED = "SELECT * FROM blockedStudents WHERE userId=?";
     private final String GET_ALL_BLOCKED_STUDENTS = "SELECT * FROM blockedStudents";
+    private final String BLOCK_STUDENT_ID = "INSERT INTO BLOCKEDSTUDENTS(USERID) VALUES (?)";
+    private final String DELETE_FROM_BLOCKED = "DELETE FROM BLOCKEDSTUDENTS WHERE USERID=?";
 
     // get user using userId
     private final String GET_USER_QUERY_ID = "SELECT * FROM users WHERE userId=?";
@@ -57,6 +59,8 @@ public class UsersRepository {
     private PreparedStatement getAllStudentsStmt;
     private PreparedStatement getAllLibrariansStmt;
     private PreparedStatement getAllBlocked;
+    private PreparedStatement blockStudent;
+    private PreparedStatement removeFromBlocked;
 
     private PreparedStatement getUserWithEmailStmt;
     private PreparedStatement getUserWithIdStmt;
@@ -80,6 +84,8 @@ public class UsersRepository {
             getAllLibrariansStmt = conn.prepareStatement(GET_ALL_LIBRARIANS_QUERY);
             getUserWithEmailStmt = conn.prepareStatement(GET_USER_QUERY_EMAIL);
             getUserWithIdStmt = conn.prepareStatement(GET_USER_QUERY_ID);
+            blockStudent = conn.prepareStatement(BLOCK_STUDENT_ID);
+            removeFromBlocked = conn.prepareStatement(DELETE_FROM_BLOCKED);
 
             addUserStmt = conn.prepareStatement(ADD_USER_QUERY);
             getRoleStmt = conn.prepareStatement(GET_ROLE_QUERY);
@@ -339,6 +345,25 @@ public class UsersRepository {
             throwables.printStackTrace();
         }
         return false;
+    }
+
+    public void blockStudentID(User user) throws SQLException {
+        getBlocked.setString(1, user.getUserId());
+        ResultSet check = getBlocked.executeQuery();
+        if (!check.next()){
+            blockStudent.setString(1, user.getUserId());
+            blockStudent.executeUpdate();
+        }
+    }
+
+    public void removeFromBlockedSt(User user) throws SQLException {
+        getUserWithEmailStmt.setString(1, user.getEmail());
+        ResultSet result = getUserWithEmailStmt.executeQuery();
+        if (result.next()) {
+            String ID = result.getString("userId");
+            removeFromBlocked.setString(1, ID);
+            removeFromBlocked.executeUpdate();
+        }
     }
 
 }
