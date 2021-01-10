@@ -8,7 +8,9 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane fx:id="gridPane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="811.0" style="-fx-background-color: #0277BD; -fx-border-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="studentWindow.booksWindow.BooksWindowController">
+
+<?import javafx.scene.control.ChoiceBox?>
+<GridPane fx:id="gridPane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="811.0" style="-fx-background-color: #0277BD; -fx-border-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="studentWindow.booksWindow.BooksWindowController">
 
     <columnConstraints>
         <ColumnConstraints halignment="CENTER" maxWidth="294.66668701171875" minWidth="10.0" prefWidth="190.0" />

@@ -33,8 +33,6 @@ public class profileWindowController {
     @FXML
     public Button signOutButton;
     @FXML
-    public Label firstName;
-    @FXML
     public Label lastName;
     @FXML
     public Label numberOfBooks;
@@ -49,6 +47,7 @@ public class profileWindowController {
         System.out.println(student);
         System.out.println("firstName: " + student.getFirstName());
         firstName.setText(student.getFirstName());
+
         lastName.setText(student.getLastName());
         numberOfBooks.setText(String.valueOf(BooksRepository.getInstance().getStudentBooks(student).size()));
         overdueBooks.setText(String.valueOf(BooksRepository.getInstance().getOverdueBooks(student).size()));

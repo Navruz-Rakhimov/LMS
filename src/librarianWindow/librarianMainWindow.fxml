@@ -173,6 +173,7 @@
                             <Button mnemonicParsing="false" onAction="#handleAddStudentButton" text="Add" />
                               <Button mnemonicParsing="false" onAction="#handleDeleteStudentButton" text="Remove" />
                               <Button mnemonicParsing="false" onAction="#handleModifyStudentButton" text="Modify" />
+                              <Button mnemonicParsing="false" onAction="#handleBlock" text="Block" />
                           </items>
                         </ToolBar>
                         <ImageView fitHeight="200.0" fitWidth="197.0" opacity="0.3">
@@ -236,6 +237,32 @@
                       <RowConstraints maxHeight="398.6000122070312" minHeight="10.0" prefHeight="392.0000366210937" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="206.60001220703126" minHeight="10.0" prefHeight="31.999963378906273" vgrow="SOMETIMES" />
                     </rowConstraints>
+                     <children>
+                        <TableView fx:id="blockedStudentsTableView" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                              <TableColumn prefWidth="150.0" text="Email">
+                                  <cellValueFactory>
+                                      <PropertyValueFactory property="email" />
+                                  </cellValueFactory>
+                              </TableColumn>
+                              <TableColumn prefWidth="150.0" text="First Name">
+                                  <cellValueFactory>
+                                      <PropertyValueFactory property="firstName" />
+                                  </cellValueFactory>
+                              </TableColumn>
+                              <TableColumn prefWidth="150.0" text="Last Name">
+                                  <cellValueFactory>
+                                      <PropertyValueFactory property="lastName" />
+                                  </cellValueFactory>
+                              </TableColumn>
+                          </columns>
+                        </TableView>
+                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" prefWidth="678.0" style="-fx-background-color: #07dbee;" GridPane.rowIndex="1">
+                           <items>
+                              <Button mnemonicParsing="false" onAction="#handleRemoveFromBlocked" text="Remove" />
+                           </items>
+                        </ToolBar>
+                     </children>
                   </GridPane>
                </content>
             </Tab>
