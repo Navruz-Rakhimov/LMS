@@ -11,7 +11,7 @@ import java.sql.*;
 
 public class UsersRepository {
 
-    String dbName = "database";
+    String dbName = "main";
     String connectionURL = "jdbc:derby:./db/" + dbName;
     Connection conn = null;
 
@@ -135,6 +135,7 @@ public class UsersRepository {
 
     public Student getStudent(String email) {
         try {
+            System.out.println(email);
             getUserWithEmailStmt.setString(1, email);
             ResultSet rs = getUserWithEmailStmt.executeQuery();
             if (rs.next()) {

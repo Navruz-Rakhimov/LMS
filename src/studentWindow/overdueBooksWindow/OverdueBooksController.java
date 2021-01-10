@@ -36,6 +36,7 @@ public class OverdueBooksController {
     public void initialize() {
         String email = UsersRepository.getInstance().getCurrentUserEmail();
         student = UsersRepository.getInstance().getStudent(email);
+
         totalFineLabel.setText(String.format("%.2f", BooksRepository.getInstance().getTotalFine(student)));
         books = BooksRepository.getInstance().getOverdueBooks(student);
         tableView.setItems(books);

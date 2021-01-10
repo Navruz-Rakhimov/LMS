@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import user.Student;
 import user.User;
@@ -25,6 +26,8 @@ public class profileWindowController {
 
     Student student;
 
+    @FXML
+    public GridPane gridPane;
     @FXML
     public Button booksButton;
     @FXML
@@ -41,6 +44,10 @@ public class profileWindowController {
     public void initialize() {
         String email = UsersRepository.getInstance().getCurrentUserEmail();
         student = UsersRepository.getInstance().getStudent(email);
+        System.out.println(student);
+        System.out.println("firstName: " + student.getFirstName());
+        firstName.setText(student.getFirstName());
+
         lastName.setText(student.getLastName());
         numberOfBooks.setText(String.valueOf(BooksRepository.getInstance().getStudentBooks(student).size()));
         overdueBooks.setText(String.valueOf(BooksRepository.getInstance().getOverdueBooks(student).size()));

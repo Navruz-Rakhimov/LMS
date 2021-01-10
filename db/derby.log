@@ -1,17 +1,26 @@
 ----------------------------------------------------------------
+Sun Jan 10 18:14:05 UZT 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-0176-ec6e-ad6f-000007505a20 
+on database directory C:\Java Lab Assignments\LMS\db\main with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
+Loaded from file:/C:/Apache/db-derby-10.15.2.0-bin/lib/derby.jar
+
 Sun Jan 10 17:39:48 UZT 2021:
  ???????????? ???????? Derby ?????? The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): ????????? a816c00e-0176-ec4f-49e3-00000f100000
 ? ???????? ???? ?????? D:\IUT\Fall Semester Course 2\Application Programming in Java\HOMEWORK\PROJECT\ver03\LMS\db\database jdk.internal.loader.ClassLoaders$AppClassLoader@1698c449 
-
 java.vendor=Amazon.com Inc.
-java.runtime.version=11.0.8+10-LTS
-user.dir=D:\IUT\Fall Semester Course 2\Application Programming in Java\HOMEWORK\PROJECT\ver03\LMS\db
+java.runtime.version=11.0.9.1+12-LTS
+user.dir=C:\Java Lab Assignments\LMS\db
 os.name=Windows 10
 os.arch=amd64
 os.version=10.0
 derby.system.home=null
-??????? ????????? ??????? ???? ?????? - derby.database.classpath=''
+Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
+Sun Jan 10 18:14:17 UZT 2021: Shutting down Derby engine
+----------------------------------------------------------------
+Sun Jan 10 18:14:17 UZT 2021:
+Shutting down instance a816c00e-0176-ec6e-ad6f-000007505a20 on database directory C:\Java Lab Assignments\LMS\db\main with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
+
 Sun Jan 10 17:40:16 UZT 2021: Shutting down Derby engine
 ----------------------------------------------------------------
 Sun Jan 10 17:40:17 UZT 2021:
