@@ -15,6 +15,7 @@ public class BooksRepository {
     String connectionURL = "jdbc:derby:./db/" + dbName;
     Connection conn = null;
 
+    // main statements
     private final String GET_ALL_BOOKS_QUERY = "SELECT * FROM books";
     private final String GET_BOOK_QUANTITY_QUERY = "SELECT quantity FROM books WHERE isbn=?";
     private final String ADD_BOOK_QUERY = "INSERT INTO books(isbn, title, editionNumber, copyright, quantity) VALUES (?,?,?,?,?)";
@@ -27,6 +28,7 @@ public class BooksRepository {
 
     private final String DELETE_FROM_STUDENT_FINE = "DELETE FROM studentFine WHERE isbn=?";
 
+    // statements for book borrowing
     private final String GET_ALL_BORROWED_BOOKS = "SELECT * FROM STUDENTBOOK";
     private final String GET_BOOK_QUERY = "SELECT * FROM books WHERE isbn=?";
     private final String GET_USER_ID_BORROWED_BOOKS = "SELECT * FROM STUDENTBOOK WHERE ISBN=?";
@@ -44,6 +46,9 @@ public class BooksRepository {
     private final String GET_STUDENT_BOOKS = "SELECT books.isbn, title, editionNumber, copyright FROM books INNER JOIN studentBook ON books.isbn = studentBook.isbn WHERE userId=?";
     private final String GET_OVERDUE_BOOKS = "SELECT books.isbn, title, editionNumber, copyright FROM books INNER JOIN overdueBooks ON books.isbn = overdueBooks.isbn WHERE userId=?";
 
+    // statements for book lending
+    private final String ADD_BOOK_TO_STUDENTBOOK_QUERY = "INSERT INTO STUDENTBOOK(userid, isbn) VALUES (?,?)";
+    private final String GET_BOOK_FROM_STUDENTBOOK = "SELECT USERID FROM STUDENTBOOK WHERE ISBN=?";
 
     private PreparedStatement getAllBooksStmt;
     private PreparedStatement getBookQuantityStmt;
@@ -54,6 +59,8 @@ public class BooksRepository {
 
     private PreparedStatement getBookQuery;
     private PreparedStatement getUserIDBorrowed;
+    private PreparedStatement addBookToStudentBook;
+    private PreparedStatement getBookFromStudentBook;
 
     private PreparedStatement addBookStmt;
     private PreparedStatement addAuthor;
@@ -88,6 +95,8 @@ public class BooksRepository {
 
             getBookQuery = conn.prepareStatement(GET_BOOK_QUERY);
             getUserIDBorrowed = conn.prepareStatement(GET_USER_ID_BORROWED_BOOKS);
+            addBookToStudentBook = conn.prepareStatement(ADD_BOOK_TO_STUDENTBOOK_QUERY);
+            getBookFromStudentBook = conn.prepareStatement(GET_BOOK_FROM_STUDENTBOOK);
 
 
             addBookStmt = conn.prepareStatement(ADD_BOOK_QUERY);
@@ -423,5 +432,49 @@ public class BooksRepository {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    // functions to get quantity and decrement
+    public String getBookQuantity(String isbn) throws SQLException {
+        getBookQuantityStmt.setString(1, isbn);
+        ResultSet result = getBookQuantityStmt.executeQuery();
+        if (result.next()){
+            String quantity = result.getString("quantity");
+            return quantity;
+        }
+        return null;
+    }
+
+    public void decrementQuantity(String isbn) throws SQLException {
+        getBookQuantityStmt.setString(1, isbn);
+        getBookQuantityStmt.setString(1, isbn);
+        ResultSet result = getBookQuantityStmt.executeQuery();
+        if (result.next()){
+            String quantity = result.getString("quantity");
+            int temp = Integer.parseInt(quantity) - 1;
+            updateQuantityStmt.setString(1, String.format("%d", temp));
+            updateQuantityStmt.setString(2, isbn);
+            updateQuantityStmt.executeUpdate();
+        }
+    }
+
+    public void addBookToStudentBook(String studentID, String isbn) throws SQLException {
+        addBookToStudentBook.setString(1, studentID);
+        addBookToStudentBook.setString(2, isbn);
+        addBookToStudentBook.executeUpdate();
+    }
+
+    public boolean checkIfStudentBorrowed(String isbn, String studentID) throws SQLException {
+        getBookFromStudentBook.setString(1, isbn);
+        ResultSet result = getBookFromStudentBook.executeQuery();
+        while (result.next()){
+            if (result.getString("USERID").equals(studentID)){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return false;
     }
 }
