@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane fx:id="gridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-          minWidth="-Infinity" prefHeight="450.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="studentWindow.profileWindow.profileWindowController">
+<GridPane fx:id="gridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="studentWindow.profileWindow.profileWindowController">
 
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="294.66668701171875" minWidth="10.0" prefWidth="132.6666717529297" />
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="467.3333282470703" minWidth="10.0" prefWidth="467.3333282470703" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="294.66668701171875" minWidth="10.0" prefWidth="128.33333333333334" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="572.6666666666666" minWidth="10.0" prefWidth="571.6666666666666" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="191.33334350585938" minHeight="10.0" prefHeight="90.99998982747395" vgrow="SOMETIMES" />
