@@ -49,17 +49,17 @@
         </VBox>
         <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="275.0" prefWidth="389.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
             <columns>
-                <TableColumn prefWidth="91.99993646144867" text="ISBN">
+                <TableColumn prefWidth="111.66667425632477" text="ISBN">
                     <cellValueFactory>
                         <PropertyValueFactory property="isbn" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn prefWidth="181.3333511352539" text="Title">
+                <TableColumn prefWidth="217.33330535888672" text="Title">
                     <cellValueFactory>
                         <PropertyValueFactory property="title" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn prefWidth="64.0" text="Edition">
+                <TableColumn prefWidth="80.33334350585938" text="Edition">
                     <cellValueFactory>
                         <PropertyValueFactory property="edition" />
                     </cellValueFactory>
@@ -69,7 +69,11 @@
                         <PropertyValueFactory property="copyright" />
                     </cellValueFactory>
                 </TableColumn>
-            <TableColumn prefWidth="110.0" text="Quantity" />
+                <TableColumn prefWidth="85.99990844726562" text="Quantity">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="quantity" />
+                    </cellValueFactory>
+                </TableColumn>
             </columns>
         </TableView>
         <HBox alignment="BOTTOM_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
@@ -98,6 +102,7 @@
             </LinearGradient>
          </textFill>
         </Label>
+      <ChoiceBox fx:id="choiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
       <ImageView fitHeight="200.0" fitWidth="197.0" opacity="0.3" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
          <image>
             <Image url="@logo.png" />

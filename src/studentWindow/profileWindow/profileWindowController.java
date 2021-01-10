@@ -100,5 +100,4 @@ public class profileWindowController {
             e.printStackTrace();
         }
     }
-
 }

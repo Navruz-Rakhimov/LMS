@@ -1,15 +1,20 @@
 package book;
 
-import java.util.Set;
+import java.time.LocalDate;
 
-// will be saved in table books;
+// It is not just a book. It is a library book that may have values assigned to borrowed/dueDate if someone borrows it
+// and fine associated with it if the loan period expires
 public class Book {
 
     private String isbn;
     private String title;
     private String edition;
     private String copyright;
+
     int quantity;
+    private LocalDate borrowedDate;
+    private LocalDate dueDate;
+    private String fineAmount;
 
     public Book(String isbn, String title, String edition, String copyright, int quantity) {
         this.isbn = isbn;
@@ -17,6 +22,9 @@ public class Book {
         this.edition = edition;
         this.copyright = copyright;
         this.quantity = quantity;
+
+        borrowedDate = null;
+        dueDate = null;
     }
 
     public String getIsbn() {
@@ -69,4 +77,29 @@ public class Book {
                 ", quantity=" + quantity +
                 '}';
     }
+
+    public LocalDate getBorrowedDate() {
+        return borrowedDate;
+    }
+
+    public void setBorrowedDate(LocalDate borrowedDate) {
+        this.borrowedDate = borrowedDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public String getFineAmount() {
+        return fineAmount;
+    }
+
+    public void setFineAmount(String fineAmount) {
+        this.fineAmount = fineAmount;
+    }
+
 }

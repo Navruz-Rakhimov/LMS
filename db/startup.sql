@@ -7,7 +7,6 @@ DROP TABLE studentBook;
 DROP TABLE studentFine;
 DROP TABLE blockedStudents;
 
-
 CREATE TABLE users (
     userId INT NOT NULL GENERATED ALWAYS AS IDENTITY,
     email VARCHAR(30) NOT NULL,
@@ -98,26 +97,29 @@ CREATE TABLE overdueBooks (
 
 INSERT INTO overdueBooks (userId, isbn, borrowedDate, expiredDate)
 VALUES
-    (2, '0132151006', '2020-12-11', '2021-01-01'),
-    (3, '013299044X', '2020-11-11', '2020-12-01'),
-    (5, '0136151574', '2020-10-11', '2020-11-01');
+    (2, '0132151006', '2020-12-11', '2021-12-25'),
+    (3, '013299044X', '2020-12-06', '2020-12-20'),
+    (3, '0136151574', '2020-12-01', '2020-12-15');
 
 
 CREATE TABLE studentBook (
     userId INT NOT NULL,
     isbn VARCHAR(20) NOT NULL,
+    borrowedDate DATE NOT NULL,
+    dueDate DATE NOT NULL,
     FOREIGN KEY (userId) REFERENCES users (userId),
     FOREIGN KEY (isbn) REFERENCES books (isbn)
 );
 
-INSERT INTO studentBook (userId, isbn)
+INSERT INTO studentBook (userId, isbn, borrowedDate, dueDate)
 VALUES
-    (2, '013299044X'),
-    (3, '0133807800'),
-    (3, '013299044X'),
-    (5, '0133406954'),
-    (4, '0133406954'),
-    (2, '0133764036');
+    (2, '013299044X', '2020-12-30', '2021-01-13'),
+    (3, '0133807800', '2020-12-28', '2021-01-11'),
+    (3, '013299044X', '2020-12-06', '2020-12-20'),
+    (3, '0136151574', '2020-12-01', '2020-12-15'),
+    (5, '0133406954', '2021-01-05', '2021-01-19'),
+    (4, '0133406954', '2021-01-09', '2021-01-23'),
+    (2, '0132151006', '2020-12-01', '2020-12-15');
 
 
 CREATE TABLE studentFine (
@@ -130,8 +132,9 @@ CREATE TABLE studentFine (
 
 INSERT INTO studentFine (userId, isbn, fine)
 VALUES
-    (2, '013299044X', 5.25),
-    (3, '0133807800', 2.50);
+    (2, '0132151006', 4.00),
+    (3, '013299044X', 5.25),
+    (3, '0136151574', 6.50);
 
 CREATE TABLE blockedStudents (
     userId INT NOT NULL,

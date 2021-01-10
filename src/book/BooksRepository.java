@@ -4,10 +4,13 @@ import authentication.UsersRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import user.Student;
 import librarianWindow.StudentsBorrowed;
 import user.User;
-
 import java.sql.*;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class BooksRepository {
@@ -45,6 +48,7 @@ public class BooksRepository {
     private final String ADD_AUTHOR_ISBN = "INSERT INTO authorISBN(authorId, isbn) VALUES (?,?)";
     private final String GET_STUDENT_BOOKS = "SELECT books.isbn, title, editionNumber, copyright FROM books INNER JOIN studentBook ON books.isbn = studentBook.isbn WHERE userId=?";
     private final String GET_OVERDUE_BOOKS = "SELECT books.isbn, title, editionNumber, copyright FROM books INNER JOIN overdueBooks ON books.isbn = overdueBooks.isbn WHERE userId=?";
+    private final String GET_BOOK_DATE = "SELECT * FROM studentBook WHERE userId=? AND isbn=?";
 
     // statements for book lending
     private final String ADD_BOOK_TO_STUDENTBOOK_QUERY = "INSERT INTO STUDENTBOOK(userid, isbn) VALUES (?,?)";
@@ -69,6 +73,7 @@ public class BooksRepository {
     private PreparedStatement updateQuantityStmt;
     private PreparedStatement updateBookStmt;
     private PreparedStatement getAuthor;
+    private PreparedStatement getBook;
 
     private PreparedStatement deleteFromBooks;
     private PreparedStatement deleteFromStudentBook;
@@ -80,6 +85,7 @@ public class BooksRepository {
     private PreparedStatement getAllBorrowedBooks;
 
     private static BooksRepository instance;
+
 
     private BooksRepository() {
         try {
@@ -114,6 +120,9 @@ public class BooksRepository {
             deleteFromStudentFine = conn.prepareStatement(DELETE_FROM_STUDENT_FINE);
             deleteAuthor = conn.prepareStatement(DELETE_AUTHOR_QUERY);
 
+
+            // new
+            getBook = conn.prepareStatement("SELECT * FROM books WHERE isbn=?");
             getAllBorrowedBooks = conn.prepareStatement(GET_ALL_BORROWED_BOOKS);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -127,16 +136,127 @@ public class BooksRepository {
         return instance;
     }
 
+    public boolean returnBook(Student student, Book book) {
+        try {
+            PreparedStatement deleteFromOverdue = conn.prepareStatement("DELETE FROM overdueBooks WHERE userId=? AND isbn=?");
+            PreparedStatement deleteFromStudentBook = conn.prepareStatement("DELETE FROM studentBook WHERE userId=? AND isbn=?");
+            PreparedStatement deleteFromStudentFine = conn.prepareStatement("DELETE FROM studentFine WHERE userId=? AND isbn=?");
+
+            getBook.setString(1, book.getIsbn());
+            ResultSet rs = getBook.executeQuery();
+            int quantity = 0;
+            if (rs.next()) {
+                quantity = rs.getInt("quantity");
+                quantity++;
+                updateQuantityStmt.setInt(1, quantity);
+                updateQuantityStmt.setString(2, book.getIsbn());
+                updateQuantityStmt.execute();
+
+                deleteFromOverdue.setString(1, student.getUserId());
+                deleteFromOverdue.setString(2, book.getIsbn());
+                deleteFromOverdue.execute();
+
+                deleteFromStudentBook.setString(1, student.getUserId());
+                deleteFromStudentBook.setString(2, book.getIsbn());
+                deleteFromStudentBook.execute();
+
+                deleteFromStudentFine.setString(1, student.getUserId());
+                deleteFromStudentFine.setString(2, book.getIsbn());
+                deleteFromStudentFine.execute();
+
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean borrowBook(Student student, Book book) {
+        try {
+            PreparedStatement checkIfExists = conn.prepareStatement("SELECT * FROM studentBook WHERE userId=? AND isbn=?");
+            checkIfExists.setString(1, student.getUserId());
+            checkIfExists.setString(2, book.getIsbn());
+            ResultSet rs0 = checkIfExists.executeQuery();
+            if (!rs0.next()) {
+                PreparedStatement addStudentBook = conn.prepareStatement("INSERT INTO studentBook (userId, isbn, borrowedDate, dueDate) VALUES (?, ?, ?, ?)");
+                getBook.setString(1, book.getIsbn());
+                ResultSet rs = getBook.executeQuery();
+                int quantity = 0;
+                if (rs.next()) {
+                    quantity = rs.getInt("quantity");
+                }
+                if (quantity > 0) {
+                    quantity--;
+                    updateQuantityStmt.setInt(1, quantity);
+                    updateQuantityStmt.setString(2, book.getIsbn());
+
+                    addStudentBook.setString(1, student.getUserId());
+                    addStudentBook.setString(2, book.getIsbn());
+                    addStudentBook.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+                    addStudentBook.setDate(4, java.sql.Date.valueOf(LocalDate.now().plusDays(14)));
+
+                    updateQuantityStmt.execute();
+                    addStudentBook.execute();
+                    return true;
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
     public ObservableList<Book> getStudentBooks(User user) {
+        final String ADD_OVERDUE_BOOK = "INSERT INTO overdueBooks (userId, isbn, borrowedDate, expiredDate) VALUES (?, ?, ?, ?)";
+        final String ADD_FINE_STUDENT = "INSERT INTO studentFine (userId, isbn, fine) VALUES (?, ?, ?)";
+        final String UPDATE_FINE = "UPDATE studentFine SET fine=? WHERE userId=? AND isbn=?";
         try {
             PreparedStatement getStudentBooksStmt = conn.prepareStatement(GET_STUDENT_BOOKS);
+            PreparedStatement getBookDates = conn.prepareStatement(GET_BOOK_DATE);
+            PreparedStatement addOverdueBook = conn.prepareStatement(ADD_OVERDUE_BOOK);
+            PreparedStatement addFineStudent = conn.prepareStatement(ADD_FINE_STUDENT);
+            PreparedStatement updateFine = conn.prepareStatement(UPDATE_FINE);
+
             getStudentBooksStmt.setString(1, user.getUserId());
+
             ResultSet rs = getStudentBooksStmt.executeQuery();
             ObservableList<Book> books = FXCollections.observableArrayList();
             Book book = null;
             while (rs.next()) {
                 book = new Book(rs.getString("isbn"), rs.getString("title"),
                         rs.getString("editionNumber"), rs.getString("copyright"), 1);
+                getBookDates.setString(1, user.getUserId());
+                getBookDates.setString(2, book.getIsbn());
+                ResultSet rs1 = getBookDates.executeQuery();
+                if (rs1.next()) {
+                    LocalDate borrowedDate = rs1.getDate("borrowedDate").toLocalDate();
+                    LocalDate dueDate = rs1.getDate("dueDate").toLocalDate();
+                    book.setBorrowedDate(borrowedDate);
+                    book.setDueDate(dueDate);
+                    if (dueDate.isAfter(LocalDate.now())) {
+                        long days = ChronoUnit.DAYS.between(borrowedDate, dueDate);
+                        double fine = (double) days * 0.25;
+                        if (days > 1) {
+                            updateFine.setDouble(1, fine);
+                            updateFine.setString(2, user.getUserId());
+                            updateFine.setString(3, book.getIsbn());
+                            updateFine.execute();
+                        } else {
+                            addOverdueBook.setString(1, user.getUserId());
+                            addOverdueBook.setString(2, book.getIsbn());
+                            addOverdueBook.setDate(3, java.sql.Date.valueOf(borrowedDate));
+                            addOverdueBook.setDate(4, java.sql.Date.valueOf(dueDate));
+                            addOverdueBook.execute();
+
+                            addFineStudent.setString(1, user.getUserId());
+                            addFineStudent.setString(2, book.getIsbn());
+                            addFineStudent.setDouble(3, fine);
+                            addFineStudent.execute();
+                        }
+
+                    }
+                }
                 books.add(book);
             }
             return books;
@@ -197,7 +317,6 @@ public class BooksRepository {
                 author = new Author(rs1.getString("authorId"), rs1.getString("firstName"), rs1.getString("lastName"));
                 authors.add(author);
             }
-            System.out.println(authors);
             return authors;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -208,7 +327,6 @@ public class BooksRepository {
     // deletes a book from the books table and all other relation tables where this book's isbn is a foreign key
     public void deleteBook(Book book) {
         try {
-            System.out.println(book);
             deleteFromStudentBook.setString(1, book.getIsbn());
             deleteFromOverdueBooks.setString(1, book.getIsbn());
             deleteFromAuthorIsbn.setString(1, book.getIsbn());
@@ -216,13 +334,11 @@ public class BooksRepository {
             deleteFromStudentFine.setString(1, book.getIsbn());
 
             List<Author> authors = getAuthors(book);
-            System.out.println(authors);
 
             List<Author> authorsToDelete = new ArrayList<>();
 
             ResultSet rs = null;
-            for (Author author : authors) {
-                System.out.println("INSIDE FOR LOOP (DELETE BOOK)");
+            for (Author author: authors) {
                 getAuthorWithId.setString(1, author.getAuthorId());
                 // there must be only one author with such id if we want to delete it from authors table as well
                 rs = getAuthorWithId.executeQuery();
@@ -248,8 +364,6 @@ public class BooksRepository {
             throwables.printStackTrace();
         }
     }
-
-
     // inserts information about book and its authors into authorISBN table
     public void addAuthorIsbn(Book book, List<Author> authors) {
         try {
@@ -349,13 +463,30 @@ public class BooksRepository {
     public ObservableList<Book> getOverdueBooks(User student) {
         try {
             PreparedStatement getOverdueBooksStmt = conn.prepareStatement(GET_OVERDUE_BOOKS);
+            PreparedStatement getBookDates = conn.prepareStatement(GET_BOOK_DATE);
+            PreparedStatement getBookFine = conn.prepareStatement("SELECT * FROM studentFine WHERE userId=? AND isbn=?");
             getOverdueBooksStmt.setString(1, student.getUserId());
-            ResultSet rs = getOverdueBooksStmt.executeQuery();
+
             ObservableList<Book> books = FXCollections.observableArrayList();
             Book book = null;
+
+            ResultSet rs = getOverdueBooksStmt.executeQuery();
             while (rs.next()) {
                 book = new Book(rs.getString("isbn"), rs.getString("title"),
                         rs.getString("editionNumber"), rs.getString("copyright"), 1);
+                getBookDates.setString(1, student.getUserId());
+                getBookDates.setString(2, book.getIsbn());
+                ResultSet rs1 = getBookDates.executeQuery();
+                if (rs1.next()) {
+                    book.setBorrowedDate(rs1.getDate("borrowedDate").toLocalDate());
+                    book.setDueDate(rs1.getDate("dueDate").toLocalDate());
+                }
+                getBookFine.setString(1, student.getUserId());
+                getBookFine.setString(2, book.getIsbn());
+                ResultSet rs2 = getBookFine.executeQuery();
+                if (rs2.next()) {
+                    book.setFineAmount(String.format("%.2f", rs2.getDouble("fine")));
+                }
                 books.add(book);
             }
             return books;
@@ -380,7 +511,49 @@ public class BooksRepository {
         }
         return "";
     }
+  
+    public ObservableList<Book> searchBooks(String select, String newValue) {
+        System.out.println(select + " - " + newValue);
+        ObservableList<Book> books = FXCollections.observableArrayList();
 
+        String selectBooks = "SELECT * FROM books WHERE " + select.toLowerCase() + " LIKE '%" + newValue + "%'";
+
+        if (newValue.length() != 0) {
+            String getAuthors = "SELECT * FROM authors WHERE firstName LIKE '%" + newValue + "%' OR lastName LIKE '%" + newValue + "%'";
+            String getAuthorBooks = "SELECT * FROM books INNER JOIN authorISBN ON books.isbn = authorISBN.isbn WHERE authorId=?";
+            try {
+                Statement getAuthorsStmt = conn.createStatement();
+                PreparedStatement getAuthorBooksStmt = conn.prepareStatement(getAuthorBooks);
+
+                if (select.equals("Author")) {
+                    ResultSet rs = getAuthorsStmt.executeQuery(getAuthors);
+                    while (rs.next()) {
+                        // get each author's books;
+                        String authorId = String.valueOf(rs.getInt("authorId"));
+                        getAuthorBooksStmt.setString(1, authorId);
+                        ResultSet rs1 = getAuthorBooksStmt.executeQuery();
+                        while(rs1.next()) {
+                            Book book = new Book(rs1.getString("isbn"), rs1.getString("title"),
+                                    rs1.getString("editionNumber"), rs1.getString("copyright"), rs1.getInt("quantity"));
+                            books.add(book);
+                        }
+                    }
+                } else {
+                    PreparedStatement selectBooksStmt = conn.prepareStatement(selectBooks);
+                    ResultSet rs1 = selectBooksStmt.executeQuery();
+                    while (rs1.next()) {
+                        Book book = new Book(rs1.getString("isbn"), rs1.getString("title"),
+                                rs1.getString("editionNumber"), rs1.getString("copyright"), rs1.getInt("quantity"));
+                        books.add(book);
+                    }
+                }
+                return books;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return null;
+    }
     // return a list of borrowed books
     public ObservableList<BorrowedBook> getBorrowedBooks(){
         ResultSet resultSet = null;

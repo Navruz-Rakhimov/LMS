@@ -2,10 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
@@ -18,7 +18,6 @@
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
-
 <GridPane fx:id="gridPane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="811.0" style="-fx-background-color: #0277BD; -fx-border-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="studentWindow.overdueBooksWindow.OverdueBooksController">
 
     <columnConstraints>
@@ -43,7 +42,50 @@
             <Insets left="5.0" right="5.0" />
          </padding>
         </VBox>
-      <TableView fx:id="tableView" prefHeight="341.0" prefWidth="575.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <TableView fx:id="tableView" prefHeight="341.0" prefWidth="575.0">
+              <columns>
+                  <TableColumn prefWidth="92.66668570041656" text="ISBN">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="isbn" />
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="204.0000228881836" text="Title">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="title" />
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="68.0" text="Edition">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="edition" />
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn minWidth="0.0" prefWidth="110.66665649414062" text="Expired Date">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="dueDate" />
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="103.3333638509115" text="Fine Amount $">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="fineAmount" />
+                      </cellValueFactory>
+                  </TableColumn>
+              </columns>
+            </TableView>
+              <HBox alignment="BOTTOM_RIGHT" prefHeight="0.0" prefWidth="575.0" spacing="10.0">
+                  <children>
+                      <Button mnemonicParsing="false" onAction="#handleView" text="View" />
+                      <Button mnemonicParsing="false" onAction="#handleReturn" text="Return" />
+                  </children>
+                  <padding>
+                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+              </HBox>
+         </children>
+      </VBox>
+<!--       <TableView fx:id="tableView" prefHeight="341.0" prefWidth="575.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <columns>
             <TableColumn prefWidth="92.66668570041656" text="ISBN">
                 <cellValueFactory>
@@ -63,18 +105,17 @@
             <TableColumn minWidth="0.0" prefWidth="110.66665649414062" text="Expired Date" />
             <TableColumn prefWidth="103.3333638509115" text="Fine Amount $" />
         </columns>
-      </TableView>
+      </TableView> -->
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="CENTER">
          <children>
             <HBox alignment="CENTER_RIGHT" prefHeight="61.0" prefWidth="620.0" spacing="10.0">
                <children>
+
                   <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="51.0" prefWidth="141.0" text="Total fine amount:" textFill="WHITE">
                      <font>
                         <Font size="17.0" />
                      </font></Label>
-                  <Label fx:id="totalFineLabel" prefHeight="28.0" prefWidth="107.0" text="\$50.25" textFill="WHITE" />
-                  <ChoiceBox prefWidth="150.0" />
-                  <TextField promptText="Search" />
+                  <Label fx:id="totalFineLabel" prefHeight="28.0" prefWidth="107.0" text="\$50.25" textFill="WHITE" />>
                </children>
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
