@@ -5,6 +5,7 @@ import adminWindow.NewUserDialogController;
 import authentication.UsersRepository;
 import book.Book;
 import book.BooksRepository;
+import book.BorrowedBook;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import librarianWindow.booksModifyWindow.BooksModifyController;
+import librarianWindow.borrowedBooksDialogWindow.BorrowedBooksController;
 import librarianWindow.studentModifyWindow.StudentModifyWindowController;
 import staticTools.UserTracker;
 import user.User;
@@ -29,6 +31,8 @@ import java.util.Optional;
 public class librarianWindowController {
     ObservableList<User> students;
     ObservableList<Book> books;
+    ObservableList<BorrowedBook> borrowedBooks;
+
     @FXML
     private Label userEmailLabel;
     @FXML
@@ -37,15 +41,18 @@ public class librarianWindowController {
     private TableView<Book> booksTableView;
     @FXML
     private TableView<User> studentsTableView;
-
+    @FXML
+    private TableView<BorrowedBook> borrowedBookTableView;
 
     @FXML
     public void initialize(){
         userEmailLabel.setText(UserTracker.getLastTrackedUser());
         books = BooksRepository.getInstance().getAllBooks();
+        borrowedBooks = BooksRepository.getInstance().getBorrowedBooks();
         students = UsersRepository.getInstance().getAllStudents();
         booksTableView.setItems(books);
         studentsTableView.setItems(students);
+        borrowedBookTableView.setItems(borrowedBooks);
     }
 
     // books tab
@@ -214,5 +221,25 @@ public class librarianWindowController {
         stage.showAndWait();
 
         studentsTableView.refresh();
+    }
+
+
+    // Borrowed books tab
+    @FXML
+    public void handleViewBorrowed() throws IOException {
+        int addressIndex = borrowedBookTableView.getSelectionModel().getSelectedIndex();
+        BorrowedBook book = borrowedBooks.get(addressIndex);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/librarianWindow/borrowedBooksDialogWindow/borrowedBooks.fxml"));
+        Parent parent = loader.load();
+        BorrowedBooksController dialogController = loader.<BorrowedBooksController>getController();
+        dialogController.setStudentsInfo(BooksRepository.getInstance().getStudentsWhoBorrowed(book.getIsbn()), book.getTitle());
+
+        Scene scene = new Scene(parent, 400, 400);
+        Stage stage = new Stage();
+        stage.setTitle("Borrow Info");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 }
