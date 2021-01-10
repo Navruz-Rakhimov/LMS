@@ -4,6 +4,8 @@ DROP TABLE authors;
 DROP TABLE authorISBN;
 DROP TABLE overdueBooks;
 DROP TABLE studentBook;
+DROP TABLE studentFine;
+DROP TABLE blockedStudents;
 
 
 CREATE TABLE users (
@@ -22,8 +24,8 @@ VALUES
     ('dostonbek@gmail.com', '22222', 'Doston', 'Dostonov', 2),
     ('magomedov@gmail.com', '33333', 'Magomed', 'Magomedov', 2),
     ('elonmusk@gmail.com', '44444', 'Elon', 'Musk', 2),
-    ( 'ccovington@gmail.com', '22222', 'Colby', 'Covington', 2),
-    ( 'dc@gmail.com', '11111', 'Daniel', 'Cormier', 1),
+    ('ccovington@gmail.com', '22222', 'Colby', 'Covington', 2),
+    ('dc@gmail.com', '11111', 'Daniel', 'Cormier', 1),
     ('jlawrence@gmail.com', '11111','Jennifer', 'Lawrence', 1);
 
 
@@ -118,7 +120,25 @@ VALUES
     (2, '0133764036');
 
 
+CREATE TABLE studentFine (
+    userId INT NOT NULL,
+    isbn VARCHAR(20) NOT NULL,
+    fine DOUBLE NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users (userId),
+    FOREIGN KEY (isbn) REFERENCES books (isbn)
+);
 
+INSERT INTO studentFine (userId, isbn, fine)
+VALUES
+    (2, '013299044X', 5.25),
+    (3, '0133807800', 2.50);
+
+CREATE TABLE blockedStudents (
+    userId INT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users (userId)
+);
+
+INSERT INTO blockedStudents(userId) VALUES (4);
 
 
 

@@ -57,8 +57,11 @@ public class LogInController {
         String email = emailTxt.getText().trim();
         String password = passwordTxt.getText().trim();
 
-        UserTracker.trackLogIn(email);
 
+        UsersRepository.getInstance().setCurrentUserEmail(email);
+
+        UserTracker.trackLogIn(email);
+      
         if (!email.equals("") && !password.equals("")) {
             User user = new User(email, password);
 
@@ -77,7 +80,7 @@ public class LogInController {
                             root = FXMLLoader.load(getClass().getResource("/librarianWindow/librarianMainWindow.fxml"));
                             break;
                         case 2:
-                            root = FXMLLoader.load(getClass().getResource("/studentWindow/studentWindowFxml.fxml"));
+                            root = FXMLLoader.load(getClass().getResource("/studentWindow/booksWindow/booksWindow.fxml"));
                             break;
                     }
                 } catch (IOException e) {

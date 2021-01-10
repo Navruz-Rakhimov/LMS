@@ -10,6 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <GridPane hgap="10.0" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librarianWindow.studentModifyWindow.StudentModifyWindowController">
+
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="276.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.20001220703125" minWidth="10.0" prefWidth="124.0" />

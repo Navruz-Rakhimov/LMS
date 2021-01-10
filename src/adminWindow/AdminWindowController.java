@@ -125,7 +125,6 @@ public class AdminWindowController {
                         alert.setHeaderText("The student details could not be modified!");
                         alert.setContentText("Student with entered email already exists!");
                         alert.showAndWait();
-
                     }
                 }
             }
