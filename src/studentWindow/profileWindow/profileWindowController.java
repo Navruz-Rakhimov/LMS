@@ -46,7 +46,6 @@ public class profileWindowController {
         student = UsersRepository.getInstance().getStudent(email);
         System.out.println(student);
         System.out.println("firstName: " + student.getFirstName());
-        firstName.setText(student.getFirstName());
 
         lastName.setText(student.getLastName());
         numberOfBooks.setText(String.valueOf(BooksRepository.getInstance().getStudentBooks(student).size()));

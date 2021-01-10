@@ -11,7 +11,7 @@ import java.sql.*;
 
 public class UsersRepository {
 
-    String dbName = "main";
+    String dbName = "database";
     String connectionURL = "jdbc:derby:./db/" + dbName;
     Connection conn = null;
 
