@@ -9,19 +9,23 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librarianWindow.librarianWindowController">
+<GridPane fx:id="gridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="713.0" style="-fx-border-color: white; -fx-background-color: #0277BD;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librarianWindow.librarianWindowController">
 
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="465.6000160217285" minHeight="10.0" prefHeight="28.800003051757812" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="465.6000160217285" minHeight="10.0" prefHeight="451.1999969482422" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="28.800003051757812" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="451.1999969482422" valignment="CENTER" vgrow="ALWAYS" />
   </rowConstraints>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
@@ -29,37 +33,58 @@
    <children>
       <GridPane hgap="10.0">
         <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="593.5999755859375" minWidth="10.0" prefWidth="593.5999755859375" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="335.20001220703125" minWidth="10.0" prefWidth="86.4000244140625" />
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="593.5999755859375" minWidth="10.0" prefWidth="196.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="377.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="121.0" minWidth="10.0" prefWidth="99.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" onAction="#handleSignOutButton" text="Log Out" GridPane.columnIndex="1" />
-            <Label fx:id="userEmailLabel" text="userEmail">
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleSignOutButton" text="Log Out" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
-                  <Font size="14.0" />
+                  <Font name="Century Gothic" size="14.0" />
                </font>
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin></Button>
+            <Label fx:id="userEmailLabel" opacity="0.65" text="userEmail" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <font>
+                  <Font name="Century Gothic" size="19.0" />
+               </font>
+            </Label>
+            <Label text="IUT Library" textAlignment="CENTER">
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="WHITE" offset="0.007662835249042145" />
+                        <Stop color="#08adff" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </textFill>
             </Label>
          </children>
       </GridPane>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
+      <TabPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" tabClosingPolicy="UNAVAILABLE" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
         <tabs>
           <Tab text="Books">
                <content>
-                  <GridPane>
+                  <GridPane alignment="CENTER">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="397.79999389648435" minHeight="10.0" prefHeight="393.0000061035156" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="393.0000061035156" valignment="CENTER" vgrow="ALWAYS" />
                       <RowConstraints maxHeight="206.59998168945313" minHeight="10.0" prefHeight="29.79999389648441" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <TableView fx:id="booksTableView" prefHeight="200.0" prefWidth="200.0">
                             <columns>
-                                <TableColumn prefWidth="100" text="ISBN">
+                                <TableColumn prefWidth="100.0" text="ISBN">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="isbn" />
                                     </cellValueFactory>
@@ -79,20 +104,25 @@
                                         <PropertyValueFactory property="copyright" />
                                     </cellValueFactory>
                                 </TableColumn>
-                                <TableColumn prefWidth="100" text="Quantity">
+                                <TableColumn prefWidth="100.0" text="Quantity">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="quantity" />
                                     </cellValueFactory>
                                 </TableColumn>
                             </columns>
                         </TableView>
-                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
+                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" prefWidth="678.0" style="-fx-background-color: #07dbee;" GridPane.rowIndex="1">
                           <items>
                             <Button mnemonicParsing="false" onAction="#handleAddButton" text="Add" />
                               <Button mnemonicParsing="false" onAction="#handleDeleteButton" text="Remove" />
                               <Button mnemonicParsing="false" onAction="#handleModifyButton" text="Modify" />
                           </items>
                         </ToolBar>
+                        <ImageView fitHeight="200.0" fitWidth="197.0" opacity="0.3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <image>
+                              <Image url="@logo.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </GridPane>
                </content>
@@ -101,10 +131,10 @@
                <content>
                   <GridPane>
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="396.20001831054685" minHeight="10.0" prefHeight="395.2000244140625" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="393.0" valignment="CENTER" vgrow="ALWAYS" />
                       <RowConstraints maxHeight="206.60001220703126" minHeight="10.0" prefHeight="28.79997558593749" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -137,13 +167,18 @@
                                 </TableColumn>
                             </columns>
                         </TableView>
-                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
+                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" prefWidth="678.0" style="-fx-background-color: #07dbee;" GridPane.rowIndex="1">
                           <items>
                             <Button mnemonicParsing="false" onAction="#handleAddStudentButton" text="Add" />
                               <Button mnemonicParsing="false" onAction="#handleDeleteStudentButton" text="Remove" />
                               <Button mnemonicParsing="false" onAction="#handleModifyStudentButton" text="Modify" />
                           </items>
                         </ToolBar>
+                        <ImageView fitHeight="200.0" fitWidth="197.0" opacity="0.3">
+                           <image>
+                              <Image url="@logo.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </GridPane>
                </content></Tab>
@@ -151,11 +186,11 @@
                <content>
                   <GridPane>
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="393.6000244140625" minHeight="10.0" prefHeight="391.99998779296874" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="206.60001220703126" minHeight="10.0" prefHeight="32.00001220703126" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="391.99998779296874" valignment="CENTER" vgrow="ALWAYS" />
+                      <RowConstraints maxHeight="206.60001220703126" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <TableView fx:id="borrowedBookTableView" prefHeight="200.0" prefWidth="200.0">
@@ -177,11 +212,16 @@
                               </TableColumn>
                           </columns>
                         </TableView>
-                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
+                        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" prefWidth="678.0" style="-fx-background-color: #07dbee;" GridPane.rowIndex="1">
                           <items>
                             <Button mnemonicParsing="false" onAction="#handleViewBorrowed" text="View" />
                           </items>
                         </ToolBar>
+                        <ImageView fitHeight="200.0" fitWidth="197.0" opacity="0.3">
+                           <image>
+                              <Image url="@logo.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </GridPane>
                </content></Tab>
