@@ -59,6 +59,11 @@ public class LendBookWindowController {
             alert.setHeaderText("Book Landing");
             alert.setContentText("This Student has already taken this book.");
             alert.showAndWait();
+        }else if (UsersRepository.getInstance().isBlocked(user)){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Book Landing");
+            alert.setContentText("This Student has been blocked.");
+            alert.showAndWait();
         }
         else {
             BooksRepository.getInstance().addBookToStudentBook(user.getUserId(), book.getIsbn());

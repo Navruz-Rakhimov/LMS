@@ -33,6 +33,7 @@ public class UsersRepository {
     private final String GET_USER_QUERY_EMAIL = "SELECT * FROM users where email=?";
     private final String GET_USER_ID = "SELECT userId FROM users WHERE email=?";
     private final String GET_BLOCKED = "SELECT * FROM blockedStudents WHERE userId=?";
+    private final String GET_ALL_BLOCKED_STUDENTS = "SELECT * FROM blockedStudents";
 
     // get user using userId
     private final String GET_USER_QUERY_ID = "SELECT * FROM users WHERE userId=?";
@@ -55,6 +56,7 @@ public class UsersRepository {
     private PreparedStatement getAllUsersStmt;
     private PreparedStatement getAllStudentsStmt;
     private PreparedStatement getAllLibrariansStmt;
+    private PreparedStatement getAllBlocked;
 
     private PreparedStatement getUserWithEmailStmt;
     private PreparedStatement getUserWithIdStmt;
@@ -72,6 +74,7 @@ public class UsersRepository {
         try {
             conn = DriverManager.getConnection(connectionURL);
 
+            getAllBlocked = conn.prepareStatement(GET_ALL_BLOCKED_STUDENTS);
             getAllUsersStmt = conn.prepareStatement(GET_ALL_USERS_QUERY);
             getAllStudentsStmt = conn.prepareStatement(GET_ALL_STUDENTS_QUERY);
             getAllLibrariansStmt = conn.prepareStatement(GET_ALL_LIBRARIANS_QUERY);
@@ -97,7 +100,7 @@ public class UsersRepository {
         return instance;
     }
 
-    boolean isBlocked(User user) {
+    public boolean isBlocked(User user) {
         try {
             getBlocked.setString(1, user.getUserId());
             ResultSet rs = getBlocked.executeQuery();
@@ -108,6 +111,20 @@ public class UsersRepository {
             throwables.printStackTrace();
         }
         return false;
+    }
+
+    public ObservableList<User> getAllBlockedStudents() throws SQLException {
+        ObservableList<User> blocked = FXCollections.observableArrayList();
+        ResultSet result = getAllBlocked.executeQuery();
+        while (result.next()){
+            getUserWithIdStmt.setString(1, result.getString("userId"));
+            ResultSet temp = getUserWithIdStmt.executeQuery();
+            if (temp.next()) {
+                User user = new User(temp.getString("email"), temp.getString("firstName"), temp.getString("lastName"));
+                blocked.add(user);
+            }
+        }
+        return blocked;
     }
 
     public Student getStudent(String email) {

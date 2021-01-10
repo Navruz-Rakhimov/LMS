@@ -33,7 +33,10 @@ public class librarianWindowController {
     ObservableList<User> students;
     ObservableList<Book> books;
     ObservableList<BorrowedBook> borrowedBooks;
+    ObservableList<User> blockedStudents;
 
+    @FXML
+    private TableView<User> blockedStudentsTableView;
     @FXML
     private Label userEmailLabel;
     @FXML
@@ -46,14 +49,16 @@ public class librarianWindowController {
     private TableView<BorrowedBook> borrowedBookTableView;
 
     @FXML
-    public void initialize(){
+    public void initialize() throws SQLException {
         userEmailLabel.setText(UserTracker.getLastTrackedUser());
         books = BooksRepository.getInstance().getAllBooks();
+        blockedStudents = UsersRepository.getInstance().getAllBlockedStudents();
         borrowedBooks = BooksRepository.getInstance().getBorrowedBooks();
         students = UsersRepository.getInstance().getAllStudents();
         booksTableView.setItems(books);
         studentsTableView.setItems(students);
         borrowedBookTableView.setItems(borrowedBooks);
+        blockedStudentsTableView.setItems(blockedStudents);
     }
     public void reinitialize(){
         borrowedBooks = BooksRepository.getInstance().getBorrowedBooks();
