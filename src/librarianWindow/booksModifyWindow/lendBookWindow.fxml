@@ -7,30 +7,52 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="600.0" prefWidth="475.0" vgap="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librarianWindow.booksModifyWindow.LendBookWindowController">
+<GridPane alignment="CENTER" prefHeight="600.0" prefWidth="475.0" style="-fx-background-color: #0277bd; -fx-border-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librarianWindow.booksModifyWindow.LendBookWindowController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="195.59998168945313" minHeight="0.0" prefHeight="37.39999694824219" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="534.4000366210937" minHeight="10.0" prefHeight="492.7999877929687" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="64.59995117187498" minHeight="10.0" prefHeight="38.400012207031295" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="100.0" minHeight="0.0" prefHeight="37.39999694824219" valignment="CENTER" vgrow="ALWAYS" />
+    <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="478.0" valignment="CENTER" vgrow="ALWAYS" />
+    <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="55.0" valignment="CENTER" vgrow="ALWAYS" />
   </rowConstraints>
    <children>
-      <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="2">
+      <ToolBar maxHeight="100.0" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="455.0" style="-fx-background-color: cyan;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
         <items>
-          <Button mnemonicParsing="false" onAction="#handleLendButton" text="Lend" />
+          <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" maxWidth="114.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleLendButton" prefHeight="35.0" prefWidth="77.0" text="Lend" textAlignment="CENTER">
+               <font>
+                  <Font name="Century Gothic" size="20.0" />
+               </font></Button>
         </items>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
       </ToolBar>
-      <Label fx:id="bookTitleLabel" text="BookTitle">
+      <Label fx:id="bookTitleLabel" alignment="CENTER" prefHeight="61.0" prefWidth="164.0" text="BookTitle">
          <font>
-            <Font size="24.0" />
+            <Font name="Century Gothic" size="35.0" />
          </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="WHITE" />
+                  <Stop color="WHITE" offset="0.007662835249042145" />
+                  <Stop color="#08adff" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
       </Label>
       <TableView fx:id="studentsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
         <columns>
@@ -51,6 +73,14 @@
             </TableColumn>
         </columns>
       </TableView>
+      <ImageView fitHeight="200.0" fitWidth="197.0" opacity="0.3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+         <image>
+            <Image url="@logo.png" />
+         </image>
+         <GridPane.margin>
+            <Insets top="30.0" />
+         </GridPane.margin>
+      </ImageView>
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
